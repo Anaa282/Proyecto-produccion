@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="640.0" prefWidth="920.0" style="-fx-background-color: #F0F0F0;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox prefWidth="115" spacing="0" style="-fx-background-color: #2C2C2C;">
+
+            <HBox alignment="CENTER" prefHeight="58" style="-fx-background-color: #3A3A3A; -fx-padding: 10;">
+                <Button prefHeight="34" prefWidth="72" style="-fx-background-color: transparent;                                -fx-border-color: #AAAAAA;                                -fx-border-width: 1.5;                                -fx-border-radius: 4;                                -fx-background-radius: 4;                                -fx-text-fill: #DDDDDD;                                -fx-font-size: 11px;                                -fx-font-weight: bold;" text="LOGO" />
+            </HBox>
+
+            <VBox spacing="3" style="-fx-padding: 8 6 8 6;">
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #AAAAAA; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Dashboard" />
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: #4A4A4A; -fx-text-fill: #FFFFFF; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Solicitudes" />
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #AAAAAA; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Tecnicos" />
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #AAAAAA; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Reportes" />
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #AAAAAA; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Historial" />
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #AAAAAA; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Configuracion" />
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <VBox style="-fx-padding: 6 6 14 6;">
+                <Button alignment="CENTER_LEFT" prefHeight="36" prefWidth="103" style="-fx-background-color: transparent; -fx-text-fill: #888888; -fx-font-size: 11px; -fx-padding: 4 10; -fx-border-radius: 5; -fx-background-radius: 5;" text="  Cerrar Sesion" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <center>
+        <VBox style="-fx-background-color: #F0F0F0;">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" prefHeight="52" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;" text="Gestion de Mantenimiento" />
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" spacing="7">
+                    <Button prefHeight="13" prefWidth="13" style="-fx-background-color: #CCCCCC; -fx-background-radius: 7; -fx-border-radius: 7; -fx-padding: 0; -fx-min-width: 13; -fx-min-height: 13;" text="" />
+                    <Button prefHeight="13" prefWidth="13" style="-fx-background-color: #CCCCCC; -fx-background-radius: 7; -fx-border-radius: 7; -fx-padding: 0; -fx-min-width: 13; -fx-min-height: 13;" text="" />
+                    <Button prefHeight="13" prefWidth="13" style="-fx-background-color: #CCCCCC; -fx-background-radius: 7; -fx-border-radius: 7; -fx-padding: 0; -fx-min-width: 13; -fx-min-height: 13;" text="" />
+                </HBox>
+            </HBox>
+
+            <!-- Cuerpo -->
+            <VBox spacing="14" style="-fx-padding: 16 18 16 18;" VBox.vgrow="ALWAYS">
+
+                <!-- Barra herramientas -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <TextField prefHeight="34" prefWidth="255" promptText="Buscar..." style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-padding: 0 10;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #444444;" text="Estado:" />
+                    <ComboBox prefHeight="34" prefWidth="120" promptText="Todos" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px;" />
+                    <ComboBox prefHeight="34" prefWidth="120" promptText="Prioridad" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px;" />
+                    <Button prefHeight="34" prefWidth="105" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #444444;" text="Actualizar" />
+                </HBox>
+
+                <!-- Tabla -->
+                <TableView prefHeight="195" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
+                    <columns>
+                        <TableColumn prefWidth="48" text="ID" />
+                        <TableColumn prefWidth="92" text="Fecha" />
+                        <TableColumn prefWidth="108" text="Residente" />
+                        <TableColumn prefWidth="90" text="Categoria" />
+                        <TableColumn prefWidth="80" text="Prioridad" />
+                        <TableColumn prefWidth="92" text="Estado" />
+                        <TableColumn prefWidth="130" text="Tecnico" />
+                        <TableColumn prefWidth="28" text="" />
+                    </columns>
+                    <placeholder>
+                        <Label style="-fx-text-fill: #AAAAAA; -fx-font-size: 12px;" text="Sin datos" />
+                    </placeholder>
+                </TableView>
+
+                <!-- Panel Detalles -->
+                <VBox spacing="11" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 14 16 14 16;">
+
+                    <HBox>
+                        <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Detalles de la solicitud " />
+                        <Label style="-fx-font-size: 13px; -fx-text-fill: #555555;" text="seleccionada:" />
+                    </HBox>
+
+                    <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #444444;" text="ID: 102" />
+
+                    <Separator />
+
+                    <HBox alignment="TOP_LEFT" spacing="20">
+                        <VBox prefWidth="175" spacing="9">
+                            <Label style="-fx-font-size: 12px; -fx-text-fill: #555555;" text="Fecha: 25/04/2024" />
+                            <VBox spacing="1">
+                                <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Residente:" />
+                                <Label style="-fx-font-size: 12px; -fx-text-fill: #555555;" text="Perez, L." />
+                            </VBox>
+                            <VBox spacing="1">
+                                <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Ubicacion:" />
+                                <Label style="-fx-font-size: 12px; -fx-text-fill: #555555;" text="Torre A, Apto 301" />
+                            </VBox>
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Descripcion:" />
+                            <TextArea prefHeight="78" style="-fx-font-size: 12px; -fx-background-color: #FAFAFA; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-text-fill: #444444;" text="Falla en el sistema de iluminacion de la entrada principal." wrapText="true" />
+                        </VBox>
+                    </HBox>
+
+                    <Separator />
+
+                    <HBox alignment="CENTER_LEFT" spacing="14">
+                        <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Cambiar estado:" />
+                        <ComboBox prefHeight="30" prefWidth="128" promptText="En proceso" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 12px;" />
+
+                        <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Asignar tecnico:" />
+                        <ComboBox prefHeight="30" prefWidth="115" promptText="Lopez" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 12px;" />
+
+                        <Region HBox.hgrow="ALWAYS" />
+
+                        <Button prefHeight="32" prefWidth="128" style="-fx-background-color: #E8E8E8; -fx-border-color: #BBBBBB; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #333333;" text="Guardar cambios" />
+                        <Button prefHeight="32" prefWidth="115" style="-fx-background-color: #DCDCDC; -fx-border-color: #BBBBBB; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #333333;" text="Ver historial" />
+                    </HBox>
+
+                </VBox>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>
