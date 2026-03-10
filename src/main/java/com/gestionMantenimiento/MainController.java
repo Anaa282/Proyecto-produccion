@@ -6,11 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MainController {
 
-    // ===== Tabla =====
+    // Tabla
     @FXML private TableView<Mantenimiento> tablaMantenimientos;
     @FXML private TableColumn<Mantenimiento, String> colId;
     @FXML private TableColumn<Mantenimiento, String> colFecha;
@@ -20,17 +21,18 @@ public class MainController {
     @FXML private TableColumn<Mantenimiento, String> colEstado;
     @FXML private TableColumn<Mantenimiento, String> colTecnico;
 
-    // ===== Panel detalles =====
+    // Panel detalles
     @FXML private Label lblId;
     @FXML private Label lblFecha;
     @FXML private Label lblResidente;
     @FXML private Label lblUbicacion;
+    @FXML private Label lblTiempo;
     @FXML private TextArea txtDescripcion;
     @FXML private ComboBox<String> cbEstado;
     @FXML private ComboBox<String> cbTecnico;
     @FXML private TextField txtBuscar;
 
-    // ===== Panel nuevo registro =====
+    // Panel nuevo registro
     @FXML private VBox panelNuevo;
     @FXML private TextField nResidente;
     @FXML private TextField nUbicacion;
@@ -42,23 +44,19 @@ public class MainController {
     @FXML private TextArea nDescripcion;
     @FXML private Label lblError;
 
-    // ===== Datos =====
+    // Datos
     private ArrayList<Mantenimiento> listaMantenimientos;
     private ObservableList<Mantenimiento> observableList;
 
     @FXML
     public void initialize() {
-        // ComboBox del panel de detalles
         cbEstado.setItems(FXCollections.observableArrayList("Pendiente", "En proceso", "Finalizado"));
         cbTecnico.setItems(FXCollections.observableArrayList("López", "Martínez", "García"));
-
-        // ComboBox del panel nuevo
         nCategoria.setItems(FXCollections.observableArrayList("Plomeria", "Electrica", "Ascensor", "Pintura", "Otro"));
         nPrioridad.setItems(FXCollections.observableArrayList("Alta", "Media", "Baja"));
         nEstado.setItems(FXCollections.observableArrayList("Pendiente", "En proceso", "Finalizado"));
         nTecnico.setItems(FXCollections.observableArrayList("López", "Martínez", "García"));
 
-        // Configurar columnas
         colId.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(String.valueOf(data.getValue().getId())));
         colFecha.setCellValueFactory(data ->
@@ -74,17 +72,14 @@ public class MainController {
         colTecnico.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().getTecnico()));
 
-        // Cargar datos desde CSV
         listaMantenimientos = MantenimientoDAO.cargarTodos();
         observableList = FXCollections.observableArrayList(listaMantenimientos);
         tablaMantenimientos.setItems(observableList);
 
-        // Al seleccionar fila mostrar detalles
         tablaMantenimientos.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> mostrarDetalles(newVal));
     }
 
-    // Muestra detalles del registro seleccionado
     private void mostrarDetalles(Mantenimiento m) {
         if (m != null) {
             lblId.setText("ID: " + m.getId());
@@ -94,10 +89,40 @@ public class MainController {
             txtDescripcion.setText(m.getDescripcion());
             cbEstado.setValue(m.getEstado());
             cbTecnico.setValue(m.getTecnico());
+            // Mostrar tiempo de resolución
+            lblTiempo.setText("⏱ Tiempo: " + m.getTiempoResolucion());
         }
     }
 
-    // Mostrar panel de nuevo registro
+    @FXML
+    public void guardarCambios() {
+        Mantenimiento seleccionado = tablaMantenimientos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            String estadoAnterior = seleccionado.getEstado();
+            String estadoNuevo = cbEstado.getValue();
+
+            seleccionado.setEstado(estadoNuevo);
+            seleccionado.setTecnico(cbTecnico.getValue());
+
+            // Si acaba de marcarse como Finalizado, registrar fecha/hora de fin
+            if (!estadoAnterior.equals("Finalizado") && estadoNuevo.equals("Finalizado")) {
+                seleccionado.setFechaHoraFin(LocalDateTime.now());
+            }
+
+            // Si se revierte de Finalizado, borrar la fecha de fin
+            if (estadoAnterior.equals("Finalizado") && !estadoNuevo.equals("Finalizado")) {
+                seleccionado.setFechaHoraFin(null);
+            }
+
+            MantenimientoDAO.guardarTodos(listaMantenimientos);
+            tablaMantenimientos.refresh();
+
+            // Actualizar el label de tiempo en pantalla
+            lblTiempo.setText("⏱ Tiempo: " + seleccionado.getTiempoResolucion());
+            System.out.println("Guardado: " + seleccionado);
+        }
+    }
+
     @FXML
     public void mostrarPanelNuevo() {
         limpiarFormulario();
@@ -105,7 +130,6 @@ public class MainController {
         panelNuevo.setManaged(true);
     }
 
-    // Ocultar panel de nuevo registro
     @FXML
     public void ocultarPanelNuevo() {
         panelNuevo.setVisible(false);
@@ -113,10 +137,8 @@ public class MainController {
         limpiarFormulario();
     }
 
-    // Guardar nuevo registro
     @FXML
     public void guardarNuevo() {
-        // Validar campos obligatorios
         if (nResidente.getText().trim().isEmpty() ||
                 nUbicacion.getText().trim().isEmpty() ||
                 nFecha.getText().trim().isEmpty() ||
@@ -129,11 +151,13 @@ public class MainController {
 
         lblError.setText("");
 
-        // Generar nuevo ID
         int nuevoId = listaMantenimientos.isEmpty() ? 1 :
                 listaMantenimientos.stream().mapToInt(Mantenimiento::getId).max().getAsInt() + 1;
 
-        // Crear nuevo mantenimiento
+        // Registrar fecha/hora de inicio al crear
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fin = nEstado.getValue().equals("Finalizado") ? ahora : null;
+
         Mantenimiento nuevo = new Mantenimiento(
                 nuevoId,
                 nFecha.getText().trim(),
@@ -143,35 +167,19 @@ public class MainController {
                 nEstado.getValue(),
                 nTecnico.getValue() != null ? nTecnico.getValue() : "",
                 nDescripcion.getText().trim(),
-                nUbicacion.getText().trim()
+                nUbicacion.getText().trim(),
+                ahora,
+                fin
         );
 
-        // Agregar al ArrayList y al CSV
         listaMantenimientos.add(nuevo);
         observableList.add(nuevo);
         MantenimientoDAO.guardarTodos(listaMantenimientos);
-
-        // Cerrar panel y seleccionar el nuevo registro
         ocultarPanelNuevo();
         tablaMantenimientos.getSelectionModel().selectLast();
-
         System.out.println("Nuevo registro guardado: " + nuevo);
     }
 
-    // Guardar cambios en registro seleccionado
-    @FXML
-    public void guardarCambios() {
-        Mantenimiento seleccionado = tablaMantenimientos.getSelectionModel().getSelectedItem();
-        if (seleccionado != null) {
-            seleccionado.setEstado(cbEstado.getValue());
-            seleccionado.setTecnico(cbTecnico.getValue());
-            MantenimientoDAO.guardarTodos(listaMantenimientos);
-            tablaMantenimientos.refresh();
-            System.out.println("Guardado: " + seleccionado);
-        }
-    }
-
-    // Recargar tabla desde CSV
     @FXML
     public void actualizar() {
         listaMantenimientos = MantenimientoDAO.cargarTodos();
@@ -179,7 +187,6 @@ public class MainController {
         tablaMantenimientos.refresh();
     }
 
-    // Limpiar formulario de nuevo registro
     private void limpiarFormulario() {
         nResidente.clear();
         nUbicacion.clear();
