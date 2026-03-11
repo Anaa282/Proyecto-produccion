@@ -1,4 +1,4 @@
-package com.gestionMantenimiento;
+package com.gestionMantenimiento.Modelo;
 
 import java.io.*;
 import java.time.LocalDateTime;

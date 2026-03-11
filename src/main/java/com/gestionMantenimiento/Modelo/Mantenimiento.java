@@ -1,4 +1,4 @@
-package com.gestionMantenimiento;
+package com.gestionMantenimiento.Modelo;
 
 import java.time.LocalDateTime;
 import java.time.Duration;
@@ -90,7 +90,7 @@ public class Mantenimiento {
                 descripcion + ";" + ubicacion + ";" + inicio + ";" + fin;
     }
 
-    // Crea un Mantenimiento desde línea CSV
+    //  Mantenimiento desde línea CSV
     public static Mantenimiento fromCSV(String linea) {
         String[] p = linea.split(";", -1);
         LocalDateTime inicio = p[9].isEmpty() ? null : LocalDateTime.parse(p[9], FORMATO);

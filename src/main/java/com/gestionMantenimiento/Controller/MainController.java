@@ -1,5 +1,7 @@
-package com.gestionMantenimiento;
+package com.gestionMantenimiento.Controller;
 
+import com.gestionMantenimiento.Modelo.Mantenimiento;
+import com.gestionMantenimiento.Modelo.MantenimientoDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,11 +53,11 @@ public class MainController {
     @FXML
     public void initialize() {
         cbEstado.setItems(FXCollections.observableArrayList("Pendiente", "En proceso", "Finalizado"));
-        cbTecnico.setItems(FXCollections.observableArrayList("López", "Martínez", "García"));
+        cbTecnico.setItems(FXCollections.observableArrayList("Lopez", "Martinez", "Garcia"));
         nCategoria.setItems(FXCollections.observableArrayList("Plomeria", "Electrica", "Ascensor", "Pintura", "Otro"));
         nPrioridad.setItems(FXCollections.observableArrayList("Alta", "Media", "Baja"));
         nEstado.setItems(FXCollections.observableArrayList("Pendiente", "En proceso", "Finalizado"));
-        nTecnico.setItems(FXCollections.observableArrayList("López", "Martínez", "García"));
+        nTecnico.setItems(FXCollections.observableArrayList("Lopez", "Martinez", "Garcia"));
 
         colId.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(String.valueOf(data.getValue().getId())));
