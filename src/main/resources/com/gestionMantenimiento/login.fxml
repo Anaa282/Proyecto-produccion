@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+
+<VBox alignment="CENTER" spacing="0"
+      prefWidth="420" prefHeight="380"
+      style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.LoginController">
+
+    <VBox alignment="CENTER" spacing="6"
+          style="-fx-background-color: #2C2C2C; -fx-padding: 38 40 32 40;">
+        <Label text="Gestión de Mantenimiento"
+               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF;"/>
+        <Label text="Selecciona tu perfil para continuar"
+               style="-fx-font-size: 12px; -fx-text-fill: #AAAAAA;"/>
+    </VBox>
+
+    <VBox alignment="CENTER" spacing="16"
+          style="-fx-padding: 44 50 44 50; -fx-background-color: #FFFFFF;">
+        <Button text="Entrar como Administrador"
+                prefWidth="280" prefHeight="48"
+                onAction="#entrarComoAdmin"
+                fx:id="btnAdmin"
+                style="-fx-background-color: #2C2C2C; -fx-text-fill: #FFFFFF;
+                       -fx-font-size: 13px; -fx-font-weight: bold;
+                       -fx-border-radius: 6; -fx-background-radius: 6;"/>
+        <Label text="o" style="-fx-text-fill: #AAAAAA; -fx-font-size: 12px;"/>
+        <Button text="Entrar como Usuario"
+                prefWidth="280" prefHeight="48"
+                onAction="#entrarComoUsuario"
+                fx:id="btnUsuario"
+                style="-fx-background-color: #FFFFFF; -fx-text-fill: #333333;
+                       -fx-font-size: 13px; -fx-font-weight: bold;
+                       -fx-border-color: #CCCCCC; -fx-border-width: 1.5;
+                       -fx-border-radius: 6; -fx-background-radius: 6;"/>
+    </VBox>
+
+    <HBox alignment="CENTER"
+          style="-fx-background-color: #F7F7F7; -fx-border-color: #DDDDDD;
+                 -fx-border-width: 1 0 0 0; -fx-padding: 14;">
+        <Label text="Sistema de gestión de solicitudes de mantenimiento"
+               style="-fx-font-size: 11px; -fx-text-fill: #AAAAAA;"/>
+    </HBox>
+</VBox>

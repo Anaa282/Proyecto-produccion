@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.HistorialController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="52"
+          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+        <Label text="Historial" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Actualizar" prefHeight="32" prefWidth="100" onAction="#actualizar"
+                style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #444444;"/>
+    </HBox>
+
+    <VBox spacing="14" VBox.vgrow="ALWAYS" style="-fx-padding: 20 18 18 18;">
+
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Label text="Solicitudes finalizadas"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblTotalFinalizados" text="Total finalizados: 0"
+                   style="-fx-font-size: 12px; -fx-text-fill: #388E3C; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS"
+                   style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
+            <columns>
+                <TableColumn fx:id="colId"        text="ID"          prefWidth="55"/>
+                <TableColumn fx:id="colFecha"     text="Fecha"       prefWidth="95"/>
+                <TableColumn fx:id="colResidente" text="Residente"   prefWidth="130"/>
+                <TableColumn fx:id="colCategoria" text="Categoría"   prefWidth="100"/>
+                <TableColumn fx:id="colTecnico"   text="Técnico"     prefWidth="110"/>
+                <TableColumn fx:id="colTiempo"    text="Tiempo resolución" prefWidth="160"/>
+            </columns>
+            <placeholder>
+                <Label text="No hay solicitudes finalizadas" style="-fx-text-fill: #AAAAAA;"/>
+            </placeholder>
+        </TableView>
+
+    </VBox>
+</VBox>

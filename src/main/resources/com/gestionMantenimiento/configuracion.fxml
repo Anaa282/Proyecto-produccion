@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.ConfiguracionController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="52"
+          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+        <Label text="Configuración" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+    </HBox>
+
+    <VBox spacing="20" style="-fx-padding: 24 18 18 18;">
+
+        <VBox spacing="14"
+              style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 18;">
+            <Label text="Técnicos registrados"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <Separator/>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Técnico 1:" prefWidth="80" style="-fx-font-size: 12px; -fx-text-fill: #444444;"/>
+                <TextField fx:id="txtTecnico1" prefWidth="200" prefHeight="30"
+                           style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 12px; -fx-padding: 4 8;"/>
+            </HBox>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Técnico 2:" prefWidth="80" style="-fx-font-size: 12px; -fx-text-fill: #444444;"/>
+                <TextField fx:id="txtTecnico2" prefWidth="200" prefHeight="30"
+                           style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 12px; -fx-padding: 4 8;"/>
+            </HBox>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Técnico 3:" prefWidth="80" style="-fx-font-size: 12px; -fx-text-fill: #444444;"/>
+                <TextField fx:id="txtTecnico3" prefWidth="200" prefHeight="30"
+                           style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 12px; -fx-padding: 4 8;"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <Button text="Guardar configuración" prefHeight="34" prefWidth="170"
+                        onAction="#guardarConfiguracion"
+                        style="-fx-background-color: #3A3A3A; -fx-text-fill: #FFFFFF; -fx-font-size: 12px; -fx-font-weight: bold; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                <Label fx:id="lblMensaje" text=""/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="8"
+              style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+            <Label text="Acerca del sistema"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <Separator/>
+            <Label text="Sistema de Gestión de Mantenimiento v1.0"
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <Label text="Desarrollado con JavaFX 17 · Persistencia en CSV"
+                   style="-fx-font-size: 12px; -fx-text-fill: #888888;"/>
+        </VBox>
+
+    </VBox>
+</VBox>

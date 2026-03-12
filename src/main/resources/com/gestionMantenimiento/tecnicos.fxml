@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.TecnicosController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="52"
+          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+        <Label text="Técnicos" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Actualizar" prefHeight="32" prefWidth="100" onAction="#actualizar"
+                style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #444444;"/>
+    </HBox>
+
+    <VBox spacing="16" VBox.vgrow="ALWAYS" style="-fx-padding: 20 18 18 18;">
+
+        <Label text="Carga de trabajo por técnico"
+               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+        <TableView fx:id="tablaTecnicos" prefHeight="220"
+                   style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
+            <columns>
+                <TableColumn fx:id="colNombre"      text="Técnico"      prefWidth="160"/>
+                <TableColumn fx:id="colPendientes"  text="Pendientes"   prefWidth="100"/>
+                <TableColumn fx:id="colEnProceso"   text="En proceso"   prefWidth="100"/>
+                <TableColumn fx:id="colFinalizados" text="Finalizados"  prefWidth="100"/>
+                <TableColumn fx:id="colTotal"       text="Total"        prefWidth="80"/>
+            </columns>
+            <placeholder>
+                <Label text="Sin datos" style="-fx-text-fill: #AAAAAA;"/>
+            </placeholder>
+        </TableView>
+
+        <VBox spacing="8"
+              style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+            <Label text="Información"
+                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <Separator/>
+            <Label text="• La tabla muestra el número de solicitudes asignadas a cada técnico."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <Label text="• Para asignar un técnico a una solicitud, ve a la sección Solicitudes."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+        </VBox>
+
+    </VBox>
+</VBox>

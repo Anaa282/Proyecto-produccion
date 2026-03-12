@@ -13,12 +13,11 @@ public class MantenimientoDAO {
         File archivo = new File(ARCHIVO);
 
         if (!archivo.exists()) {
-            // Datos de ejemplo con fechaHoraInicio ya asignada
             LocalDateTime ahora = LocalDateTime.now();
-            lista.add(new Mantenimiento(101, "26/04/2024", "Rodríguez, F.", "Plomería",  "Alta",  "Pendiente",  "",         "Fuga de agua en baño.",               "Torre B, Apto 102", ahora.minusDays(3), null));
-            lista.add(new Mantenimiento(102, "25/04/2024", "Pérez, L.",     "Eléctrica", "Media", "En proceso", "López",    "Falla en el sistema de iluminación.", "Torre A, Apto 301", ahora.minusDays(2), null));
-            lista.add(new Mantenimiento(103, "24/04/2024", "Gómez, A.",     "Ascensor",  "Alta",  "Finalizado", "Martínez", "Ascensor no responde en piso 3.",     "Torre A",            ahora.minusDays(5), ahora.minusDays(1)));
-            lista.add(new Mantenimiento(104, "24/04/2024", "Martínez, J.",  "Plomería",  "Baja",  "Pendiente",  "",         "Goteo leve en lavamanos.",            "Torre C, Apto 201", ahora.minusHours(6), null));
+            lista.add(new Mantenimiento(101, "26/04/2024", "Rodríguez, F.", "Plomería",  "Alta",  "Pendiente",  "",         "Fuga de agua en baño.",               "Torre B, Apto 102", ahora.minusDays(3), null, ""));
+            lista.add(new Mantenimiento(102, "25/04/2024", "Pérez, L.",     "Eléctrica", "Media", "En proceso", "López",    "Falla en el sistema de iluminación.", "Torre A, Apto 301", ahora.minusDays(2), null, "Revisado el cableado principal."));
+            lista.add(new Mantenimiento(103, "24/04/2024", "Gómez, A.",     "Ascensor",  "Alta",  "Finalizado", "Martínez", "Ascensor no responde en piso 3.",     "Torre A",            ahora.minusDays(5), ahora.minusDays(1), "Reparado motor. Listo."));
+            lista.add(new Mantenimiento(104, "24/04/2024", "Martínez, J.",  "Plomería",  "Baja",  "Pendiente",  "",         "Goteo leve en lavamanos.",            "Torre C, Apto 201", ahora.minusHours(6), null, ""));
             guardarTodos(lista);
             return lista;
         }

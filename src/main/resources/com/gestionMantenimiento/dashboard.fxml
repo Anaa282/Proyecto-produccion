@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.DashboardController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="52"
+          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+        <VBox spacing="2">
+            <Label text="Dashboard" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+            <Label fx:id="lblBienvenida" text="" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-padding: 24 20 20 20;">
+
+        <!-- Tarjetas resumen -->
+        <HBox spacing="16">
+            <!-- Total -->
+            <VBox alignment="CENTER" spacing="6" prefWidth="155" prefHeight="100"
+                  style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+                <Label text="Total solicitudes" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblTotal" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+            </VBox>
+            <!-- Pendientes -->
+            <VBox alignment="CENTER" spacing="6" prefWidth="155" prefHeight="100"
+                  style="-fx-background-color: #FFF8E1; -fx-border-color: #FFD54F; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+                <Label text="Pendientes" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblPendientes" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #F9A825;"/>
+            </VBox>
+            <!-- En proceso -->
+            <VBox alignment="CENTER" spacing="6" prefWidth="155" prefHeight="100"
+                  style="-fx-background-color: #E3F2FD; -fx-border-color: #90CAF9; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+                <Label text="En proceso" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblEnProceso" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1976D2;"/>
+            </VBox>
+            <!-- Finalizados -->
+            <VBox alignment="CENTER" spacing="6" prefWidth="155" prefHeight="100"
+                  style="-fx-background-color: #E8F5E9; -fx-border-color: #A5D6A7; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+                <Label text="Finalizados" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblFinalizados" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+            </VBox>
+            <!-- Alta prioridad -->
+            <VBox alignment="CENTER" spacing="6" prefWidth="155" prefHeight="100"
+                  style="-fx-background-color: #FFEBEE; -fx-border-color: #EF9A9A; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
+                <Label text="Alta prioridad" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblAltaPrioridad" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #C62828;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Info adicional -->
+        <VBox spacing="10"
+              style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 18;">
+            <Label text="Resumen del sistema"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <Separator/>
+            <Label text="• Use el menú lateral para navegar entre secciones."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <Label text="• En Solicitudes puede crear y gestionar reportes de mantenimiento."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <Label text="• En Historial encontrará todas las solicitudes finalizadas."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <Label text="• En Reportes puede ver estadísticas por categoría."
+                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+        </VBox>
+
+    </VBox>
+</VBox>

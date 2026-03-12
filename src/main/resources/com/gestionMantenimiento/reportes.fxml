@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F0F0;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestionMantenimiento.Controller.ReportesController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="52"
+          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
+        <Label text="Reportes" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Actualizar" prefHeight="32" prefWidth="100" onAction="#actualizar"
+                style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #444444;"/>
+    </HBox>
+
+    <VBox spacing="16" VBox.vgrow="ALWAYS" style="-fx-padding: 20 18 18 18;">
+
+        <!-- Tarjetas resumen -->
+        <HBox spacing="16">
+            <VBox alignment="CENTER" spacing="4" prefWidth="200" prefHeight="80"
+                  style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                <Label text="Total solicitudes" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblTotalSolicitudes" text="0" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="4" prefWidth="200" prefHeight="80"
+                  style="-fx-background-color: #E3F2FD; -fx-border-color: #90CAF9; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                <Label text="Promedio resolución" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblPromedioResolucion" text="-" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1976D2;"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="4" prefWidth="200" prefHeight="80"
+                  style="-fx-background-color: #E8F5E9; -fx-border-color: #A5D6A7; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                <Label text="Categoría más frecuente" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                <Label fx:id="lblCategoriaMasFrecuente" text="-" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+            </VBox>
+        </HBox>
+
+        <Label text="Solicitudes por categoría"
+               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+        <TableView fx:id="tablaReportes" prefHeight="230"
+                   style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
+            <columns>
+                <TableColumn fx:id="colCategoria"     text="Categoría"        prefWidth="150"/>
+                <TableColumn fx:id="colTotal"         text="Total"            prefWidth="80"/>
+                <TableColumn fx:id="colPendientes"    text="Pendientes"       prefWidth="100"/>
+                <TableColumn fx:id="colFinalizados"   text="Finalizados"      prefWidth="100"/>
+                <TableColumn fx:id="colTiempoPromedio" text="Tiempo promedio" prefWidth="140"/>
+            </columns>
+            <placeholder>
+                <Label text="Sin datos" style="-fx-text-fill: #AAAAAA;"/>
+            </placeholder>
+        </TableView>
+
+    </VBox>
+</VBox>
