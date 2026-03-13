@@ -20,7 +20,7 @@ public class TecnicosController {
     @FXML private TableColumn<String[], String> colFinalizados;
     @FXML private TableColumn<String[], String> colTotal;
 
-    private static final List<String> TECNICOS = Arrays.asList("López", "Martínez", "García");
+    private static final List<String> TECNICOS = Arrays.asList("Lopez", "Martinez", "Garcia");
 
     @FXML
     public void initialize() {

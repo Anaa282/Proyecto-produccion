@@ -10,12 +10,11 @@
 
 <left>
     <VBox prefWidth="115" spacing="0" style="-fx-background-color: #2C2C2C;">
-        <!-- Logo -->
+
         <HBox alignment="CENTER" prefHeight="58" style="-fx-background-color: #3A3A3A; -fx-padding: 10;">
             <VBox alignment="CENTER" spacing="2"
-                  style="-fx-background-color: #5B8CFF; -fx-background-radius: 8; -fx-padding: 6 10;">
+                  style="-fx-background-color: #D3D3D3; -fx-background-radius: 8; -fx-padding: 6 10;">
                 <Label text="GM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF;"/>
-                <Label text="Gestión" style="-fx-font-size: 8px; -fx-text-fill: #DDEEFF;"/>
             </VBox>
         </HBox>
 

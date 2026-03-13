@@ -36,7 +36,7 @@ public class MainController {
         // Mostrar rol en sidebar
         lblRol.setText(SessionManager.esAdmin() ? "Administrador" : "Usuario");
 
-        // Ocultar botones restringidos para usuario
+
         if (!SessionManager.esAdmin()) {
             btnTecnicos.setVisible(false);
             btnTecnicos.setManaged(false);
@@ -44,7 +44,7 @@ public class MainController {
             btnConfiguracion.setManaged(false);
         }
 
-        // Cargar pantalla inicial
+
         navegarA("dashboard.fxml", btnDashboard);
     }
 

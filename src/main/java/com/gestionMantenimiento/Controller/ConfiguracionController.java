@@ -19,8 +19,8 @@ public class ConfiguracionController {
 
     @FXML
     public void guardarConfiguracion() {
-        // Por ahora solo muestra confirmación
-        // En una versión futura se podría persistir en un archivo de config
+
+
         lblMensaje.setText("✔ Configuración guardada correctamente.");
         lblMensaje.setStyle("-fx-text-fill: #2A7A2A; -fx-font-size: 12px;");
     }

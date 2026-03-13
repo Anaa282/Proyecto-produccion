@@ -53,7 +53,7 @@ public class ReportesController {
             long pendientes  = porCat.stream().filter(m -> m.getEstado().equals("Pendiente")).count();
             long finalizados = porCat.stream().filter(m -> m.getEstado().equals("Finalizado")).count();
 
-            // Tiempo promedio de los finalizados
+            // Tiempo promedio
             OptionalDouble avg = porCat.stream()
                     .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
                     .mapToLong(m -> java.time.Duration.between(m.getFechaHoraInicio(), m.getFechaHoraFin()).toHours())
@@ -68,7 +68,7 @@ public class ReportesController {
         lblTotalSolicitudes.setText(String.valueOf(lista.size()));
         lblCategoriaMasFrecuente.setText(categoriaMasFrecuente.isEmpty() ? "-" : categoriaMasFrecuente);
 
-        // Promedio general de resolución
+
         lista.stream()
                 .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
                 .mapToLong(m -> java.time.Duration.between(m.getFechaHoraInicio(), m.getFechaHoraFin()).toHours())
