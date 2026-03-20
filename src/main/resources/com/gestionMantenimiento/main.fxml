@@ -20,6 +20,8 @@
 
         <!-- Rol -->
         <HBox alignment="CENTER" style="-fx-padding: 8 4 4 4;">
+            <Label fx:id="lblNombre" text=""
+                   style="-fx-font-size: 11px; -fx-text-fill: #FFFFFF; -fx-font-weight: bold;"/>
             <Label fx:id="lblRol" text="Rol"
                    style="-fx-font-size: 10px; -fx-text-fill: #888888; -fx-font-style: italic;"/>
         </HBox>

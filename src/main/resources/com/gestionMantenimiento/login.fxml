@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-
 <VBox alignment="CENTER" spacing="0"
-      prefWidth="420" prefHeight="380"
+      prefWidth="420" prefHeight="420"
       style="-fx-background-color: #F0F0F0;"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -14,36 +11,37 @@
 
     <VBox alignment="CENTER" spacing="6"
           style="-fx-background-color: #2C2C2C; -fx-padding: 38 40 32 40;">
+        <VBox alignment="CENTER" spacing="2"
+              style="-fx-background-color: #5B8CFF; -fx-background-radius: 10; -fx-padding: 8 14;">
+            <Label text="GM" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF;"/>
+            <Label text="Gestión" style="-fx-font-size: 9px; -fx-text-fill: #DDEEFF;"/>
+        </VBox>
         <Label text="Gestión de Mantenimiento"
-               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF;"/>
-        <Label text="Selecciona tu perfil para continuar"
-               style="-fx-font-size: 12px; -fx-text-fill: #AAAAAA;"/>
-    </VBox>
-
-    <VBox alignment="CENTER" spacing="16"
-          style="-fx-padding: 44 50 44 50; -fx-background-color: #FFFFFF;">
-        <Button text="Entrar como Administrador"
-                prefWidth="280" prefHeight="48"
-                onAction="#entrarComoAdmin"
-                fx:id="btnAdmin"
-                style="-fx-background-color: #2C2C2C; -fx-text-fill: #FFFFFF;
-                       -fx-font-size: 13px; -fx-font-weight: bold;
-                       -fx-border-radius: 6; -fx-background-radius: 6;"/>
-        <Label text="o" style="-fx-text-fill: #AAAAAA; -fx-font-size: 12px;"/>
-        <Button text="Entrar como Usuario"
-                prefWidth="280" prefHeight="48"
-                onAction="#entrarComoUsuario"
-                fx:id="btnUsuario"
-                style="-fx-background-color: #FFFFFF; -fx-text-fill: #333333;
-                       -fx-font-size: 13px; -fx-font-weight: bold;
-                       -fx-border-color: #CCCCCC; -fx-border-width: 1.5;
-                       -fx-border-radius: 6; -fx-background-radius: 6;"/>
-    </VBox>
-
-    <HBox alignment="CENTER"
-          style="-fx-background-color: #F7F7F7; -fx-border-color: #DDDDDD;
-                 -fx-border-width: 1 0 0 0; -fx-padding: 14;">
-        <Label text="Sistema de gestión de solicitudes de mantenimiento"
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF; -fx-padding: 10 0 0 0;"/>
+        <Label text="Inicia sesión para continuar"
                style="-fx-font-size: 11px; -fx-text-fill: #AAAAAA;"/>
+    </VBox>
+
+    <VBox spacing="14" style="-fx-padding: 32 50 32 50; -fx-background-color: #FFFFFF;">
+        <VBox spacing="4">
+            <Label text="Usuario" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <TextField fx:id="txtUsuario" prefHeight="36" promptText="Ej: admin, lopez, residente"
+                       style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-padding: 4 10;"/>
+        </VBox>
+        <VBox spacing="4">
+            <Label text="Contraseña" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <PasswordField fx:id="txtContrasena" prefHeight="36" promptText="Contraseña"
+                           style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-padding: 4 10;"/>
+        </VBox>
+        <Label fx:id="lblError" text=""
+               style="-fx-text-fill: #CC0000; -fx-font-size: 11px;"/>
+        <Button text="Iniciar sesión" prefWidth="10000" prefHeight="40"
+                onAction="#iniciarSesion"
+                style="-fx-background-color: #2C2C2C; -fx-text-fill: #FFFFFF; -fx-font-size: 13px; -fx-font-weight: bold; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+    </VBox>
+
+    <HBox alignment="CENTER" style="-fx-background-color: #F7F7F7; -fx-border-color: #DDDDDD; -fx-border-width: 1 0 0 0; -fx-padding: 12;">
+        <Label text="admin / residente / lopez / martinez / garcia"
+               style="-fx-font-size: 10px; -fx-text-fill: #AAAAAA;"/>
     </HBox>
 </VBox>

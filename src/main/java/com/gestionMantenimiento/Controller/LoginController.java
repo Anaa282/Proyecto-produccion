@@ -1,34 +1,43 @@
 package com.gestionMantenimiento.Controller;
 
-import com.gestionMantenimiento.Util.SessionManager;
+import com.gestionMantenimiento.Modelo.UsuarioDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
 
 public class LoginController {
 
-    @FXML private Button btnAdmin;
-    @FXML private Button btnUsuario;
+    @FXML private TextField txtUsuario;
+    @FXML private PasswordField txtContrasena;
+    @FXML private Label lblError;
 
     @FXML
-    public void entrarComoAdmin() {
-        SessionManager.setRol(SessionManager.Rol.ADMIN);
-        abrirPrincipal();
-    }
+    public void iniciarSesion() {
+        String usuario    = txtUsuario.getText().trim();
+        String contrasena = txtContrasena.getText();
 
-    @FXML
-    public void entrarComoUsuario() {
-        SessionManager.setRol(SessionManager.Rol.USUARIO);
-        abrirPrincipal();
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            lblError.setText("* Ingresa usuario y contraseña.");
+            return;
+        }
+
+        if (UsuarioDAO.login(usuario, contrasena)) {
+            abrirPrincipal();
+        } else {
+            lblError.setText("* Usuario o contraseña incorrectos.");
+            txtContrasena.clear();
+        }
     }
 
     private void abrirPrincipal() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/gestionMantenimiento/main.fxml"));
-            Stage stage = (Stage) btnAdmin.getScene().getWindow();
+            Stage stage = (Stage) txtUsuario.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Gestión de Mantenimiento");
             stage.show();

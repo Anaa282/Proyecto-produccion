@@ -11,10 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SolicitudesController {
 
@@ -35,8 +35,8 @@ public class SolicitudesController {
     @FXML private TextArea txtDescripcion;
     @FXML private ComboBox<String> cbEstado;
     @FXML private ComboBox<String> cbTecnico;
-    @FXML private TextField txtBuscar;
     @FXML private HBox hboxEdicion;
+    @FXML private HBox hboxEdicionTecnico; // fila de asignar técnico (solo admin)
     @FXML private Button btnNuevo;
 
     @FXML private VBox panelNuevo;
@@ -71,8 +71,7 @@ public class SolicitudesController {
         colTecnico.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTecnico()));
 
         listaMantenimientos = MantenimientoDAO.cargarTodos();
-        observableList = FXCollections.observableArrayList(listaMantenimientos);
-        tablaMantenimientos.setItems(observableList);
+        cargarTablaSegunRol();
 
         tablaMantenimientos.getSelectionModel().selectedItemProperty().addListener(
                 (obs, o, n) -> mostrarDetalles(n));
@@ -80,15 +79,42 @@ public class SolicitudesController {
         aplicarRol();
     }
 
+    private void cargarTablaSegunRol() {
+        // Técnico solo ve sus solicitudes asignadas
+        if (SessionManager.esTecnico()) {
+            String nombreTecnico = SessionManager.getNombreUsuario();
+            ObservableList<Mantenimiento> suyas = FXCollections.observableArrayList(
+                    listaMantenimientos.stream()
+                            .filter(m -> nombreTecnico.equals(m.getTecnico()))
+                            .collect(Collectors.toList())
+            );
+            observableList = suyas;
+        } else {
+            observableList = FXCollections.observableArrayList(listaMantenimientos);
+        }
+        tablaMantenimientos.setItems(observableList);
+    }
+
     private void aplicarRol() {
-        boolean esAdmin = SessionManager.esAdmin();
-        hboxEdicion.setVisible(esAdmin);
-        hboxEdicion.setManaged(esAdmin);
-        if (!esAdmin) {
-            nEstado.setVisible(false);
-            nEstado.setManaged(false);
-            nTecnico.setVisible(false);
-            nTecnico.setManaged(false);
+        switch (SessionManager.getRol()) {
+            case ADMIN:
+                // Ve y puede hacer todo
+                break;
+            case RESIDENTE:
+                // Puede crear pero no editar
+                hboxEdicion.setVisible(false);
+                hboxEdicion.setManaged(false);
+                nEstado.setVisible(false);  nEstado.setManaged(false);
+                nTecnico.setVisible(false); nTecnico.setManaged(false);
+                break;
+            case TECNICO:
+                // Puede cambiar estado de sus solicitudes, no puede crear ni asignar técnico
+                btnNuevo.setVisible(false);
+                btnNuevo.setManaged(false);
+                // Ocultar fila de asignar técnico
+                hboxEdicionTecnico.setVisible(false);
+                hboxEdicionTecnico.setManaged(false);
+                break;
         }
     }
 
@@ -107,21 +133,28 @@ public class SolicitudesController {
 
     @FXML
     public void guardarCambios() {
-        if (!SessionManager.esAdmin()) return;
         Mantenimiento sel = tablaMantenimientos.getSelectionModel().getSelectedItem();
-        if (sel != null) {
+        if (sel == null) return;
+
+        // Técnico solo puede editar sus propias solicitudes
+        if (SessionManager.esTecnico()) {
+            if (!SessionManager.getNombreUsuario().equals(sel.getTecnico())) return;
+            sel.setEstado(cbEstado.getValue());
+        } else {
+            // Admin puede cambiar todo
             String anterior = sel.getEstado();
-            String nuevo = cbEstado.getValue();
+            String nuevo    = cbEstado.getValue();
             sel.setEstado(nuevo);
             sel.setTecnico(cbTecnico.getValue());
             if (!anterior.equals("Finalizado") && nuevo.equals("Finalizado"))
                 sel.setFechaHoraFin(LocalDateTime.now());
             if (anterior.equals("Finalizado") && !nuevo.equals("Finalizado"))
                 sel.setFechaHoraFin(null);
-            MantenimientoDAO.guardarTodos(listaMantenimientos);
-            tablaMantenimientos.refresh();
-            lblTiempo.setText("⏱ Tiempo: " + sel.getTiempoResolucion());
         }
+
+        MantenimientoDAO.guardarTodos(listaMantenimientos);
+        tablaMantenimientos.refresh();
+        lblTiempo.setText("⏱ Tiempo: " + sel.getTiempoResolucion());
     }
 
     @FXML public void mostrarPanelNuevo() { limpiarFormulario(); panelNuevo.setVisible(true); panelNuevo.setManaged(true); }
@@ -135,17 +168,20 @@ public class SolicitudesController {
             return;
         }
         lblError.setText("");
-        String fechaStr = nFecha.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String fechaStr     = nFecha.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String estadoFinal  = SessionManager.esAdmin() && nEstado.getValue() != null ? nEstado.getValue() : "Pendiente";
         String tecnicoFinal = SessionManager.esAdmin() && nTecnico.getValue() != null ? nTecnico.getValue() : "";
+
         int nuevoId = listaMantenimientos.isEmpty() ? 1 :
                 listaMantenimientos.stream().mapToInt(Mantenimiento::getId).max().getAsInt() + 1;
+
         LocalDateTime ahora = LocalDateTime.now();
         Mantenimiento nuevo = new Mantenimiento(nuevoId, fechaStr,
                 nResidente.getText().trim(), nCategoria.getValue(), nPrioridad.getValue(),
                 estadoFinal, tecnicoFinal, nDescripcion.getText().trim(),
                 nUbicacion.getText().trim(), ahora,
                 estadoFinal.equals("Finalizado") ? ahora : null, "");
+
         listaMantenimientos.add(nuevo);
         observableList.add(nuevo);
         MantenimientoDAO.guardarTodos(listaMantenimientos);
@@ -156,7 +192,7 @@ public class SolicitudesController {
     @FXML
     public void actualizar() {
         listaMantenimientos = MantenimientoDAO.cargarTodos();
-        observableList.setAll(listaMantenimientos);
+        cargarTablaSegunRol();
     }
 
     private void limpiarFormulario() {

@@ -1,27 +1,21 @@
 package com.gestionMantenimiento.Controller;
 
-import com.gestionMantenimiento.Modelo.Mantenimiento;
-import com.gestionMantenimiento.Modelo.MantenimientoDAO;
 import com.gestionMantenimiento.Util.SessionManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-import java.util.ArrayList;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 public class MainController {
 
     @FXML private BorderPane rootPane;
     @FXML private StackPane contentArea;
     @FXML private Label lblRol;
+    @FXML private Label lblNombre;
 
-    // Botones sidebar
     @FXML private Button btnDashboard;
     @FXML private Button btnSolicitudes;
     @FXML private Button btnTecnicos;
@@ -33,32 +27,49 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // Mostrar rol en sidebar
-        lblRol.setText(SessionManager.esAdmin() ? "Administrador" : "Usuario");
+        lblNombre.setText(SessionManager.getNombreUsuario());
+        lblRol.setText(getRolTexto());
 
-
-        if (!SessionManager.esAdmin()) {
-            btnTecnicos.setVisible(false);
-            btnTecnicos.setManaged(false);
-            btnConfiguracion.setVisible(false);
-            btnConfiguracion.setManaged(false);
+        // Ocultar botones según rol
+        switch (SessionManager.getRol()) {
+            case RESIDENTE:
+                btnTecnicos.setVisible(false);     btnTecnicos.setManaged(false);
+                btnReportes.setVisible(false);      btnReportes.setManaged(false);
+                btnConfiguracion.setVisible(false); btnConfiguracion.setManaged(false);
+                break;
+            case TECNICO:
+                btnTecnicos.setVisible(false);     btnTecnicos.setManaged(false);
+                btnReportes.setVisible(false);      btnReportes.setManaged(false);
+                btnHistorial.setVisible(false);     btnHistorial.setManaged(false);
+                btnConfiguracion.setVisible(false); btnConfiguracion.setManaged(false);
+                break;
+            default:
+                break; // ADMIN ve todo
         }
-
 
         navegarA("dashboard.fxml", btnDashboard);
     }
 
+    private String getRolTexto() {
+        switch (SessionManager.getRol()) {
+            case ADMIN:     return "Administrador";
+            case RESIDENTE: return "Residente";
+            case TECNICO:   return "Técnico";
+            default:        return "";
+        }
+    }
+
     @FXML public void irDashboard()     { navegarA("dashboard.fxml",      btnDashboard); }
     @FXML public void irSolicitudes()   { navegarA("solicitudes.fxml",    btnSolicitudes); }
-    @FXML public void irTecnicos()      { if (SessionManager.esAdmin()) navegarA("tecnicos.fxml",       btnTecnicos); }
-    @FXML public void irReportes()      { navegarA("reportes.fxml",       btnReportes); }
-    @FXML public void irHistorial()     { navegarA("historial.fxml",      btnHistorial); }
-    @FXML public void irConfiguracion() { if (SessionManager.esAdmin()) navegarA("configuracion.fxml",  btnConfiguracion); }
+    @FXML public void irTecnicos()      { if (SessionManager.esAdmin()) navegarA("tecnicos.fxml", btnTecnicos); }
+    @FXML public void irReportes()      { if (SessionManager.esAdmin()) navegarA("reportes.fxml", btnReportes); }
+    @FXML public void irHistorial()     { if (!SessionManager.esTecnico()) navegarA("historial.fxml", btnHistorial); }
+    @FXML public void irConfiguracion() { if (SessionManager.esAdmin()) navegarA("configuracion.fxml", btnConfiguracion); }
 
     @FXML
     public void cerrarSesion() {
         try {
-            SessionManager.setRol(null);
+            SessionManager.cerrarSesion();
             Parent login = FXMLLoader.load(getClass().getResource("/com/gestionMantenimiento/login.fxml"));
             rootPane.getScene().setRoot(login);
         } catch (Exception e) {
@@ -70,8 +81,6 @@ public class MainController {
         try {
             Parent vista = FXMLLoader.load(getClass().getResource("/com/gestionMantenimiento/" + fxml));
             contentArea.getChildren().setAll(vista);
-
-            // Actualizar botón activo
             if (btnActivo != null) {
                 btnActivo.setStyle(btnActivo.getStyle()
                         .replace("-fx-background-color: #4A4A4A;", "-fx-background-color: transparent;")
@@ -83,7 +92,6 @@ public class MainController {
                     .replace("-fx-text-fill: #AAAAAA;", "-fx-text-fill: #FFFFFF;")
                     + " -fx-font-weight: bold;");
             btnActivo = boton;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
