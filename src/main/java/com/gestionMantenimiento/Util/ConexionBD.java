@@ -6,7 +6,9 @@ import java.sql.SQLException;
 
 public class ConexionBD {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/gestion_mantenimiento";
+    private static final String URL =
+            "jdbc:mysql://172.30.16.36:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
+
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
@@ -16,7 +18,11 @@ public class ConexionBD {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            return DriverManager.getConnection(URL, USER, PASSWORD);
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            System.out.println("Conectado a la BD mantenimiento");
+
+            return conn;
 
         } catch (ClassNotFoundException e) {
 
