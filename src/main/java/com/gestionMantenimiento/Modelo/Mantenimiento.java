@@ -77,6 +77,15 @@ public class Mantenimiento {
         this.comentarios = comentarios;
     }
 
+    public long getTiempoSolucionHoras() {
+
+        if (fechaHoraInicio == null || fechaHoraFin == null) {
+            return 0;
+        }
+
+        return java.time.Duration.between(fechaHoraInicio, fechaHoraFin).toHours();
+    }
+
     // Getters y Setters
 
     public int getId() {

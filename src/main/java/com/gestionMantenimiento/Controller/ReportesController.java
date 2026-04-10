@@ -25,10 +25,12 @@ public class ReportesController {
     @FXML private Label lblPromedioResolucion;
     @FXML private Label lblCategoriaMasFrecuente;
 
-    private static final List<String> CATEGORIAS = Arrays.asList("Plomeria", "Electrica", "Ascensor", "Pintura", "Otro");
+    private static final List<String> CATEGORIAS =
+            Arrays.asList("Plomeria", "Electrica", "Ascensor", "Pintura", "Otro");
 
     @FXML
     public void initialize() {
+
         colCategoria.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[0]));
         colTotal.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[1]));
         colPendientes.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[2]));
@@ -39,39 +41,69 @@ public class ReportesController {
     }
 
     private void cargarDatos() {
-        ArrayList<Mantenimiento> lista = MantenimientoDAO.cargarTodos();
+
+        MantenimientoDAO dao = new MantenimientoDAO();
+        ArrayList<Mantenimiento> lista = new ArrayList<>(dao.obtenerMantenimientos());
+
         List<String[]> filas = new ArrayList<>();
 
         String categoriaMasFrecuente = "";
         long maxCount = 0;
 
         for (String cat : CATEGORIAS) {
-            List<Mantenimiento> porCat = lista.stream()
-                    .filter(m -> cat.equals(m.getCategoria()))
-                    .toList();
-            long total       = porCat.size();
-            long pendientes  = porCat.stream().filter(m -> m.getEstado().equals("Pendiente")).count();
-            long finalizados = porCat.stream().filter(m -> m.getEstado().equals("Finalizado")).count();
 
-            // Tiempo promedio
+            List<Mantenimiento> porCat = lista.stream()
+                    .filter(m -> cat.equalsIgnoreCase(m.getCategoria()))
+                    .toList();
+
+            long total = porCat.size();
+
+            long pendientes = porCat.stream()
+                    .filter(m -> m.getEstado().equalsIgnoreCase("Pendiente"))
+                    .count();
+
+            long finalizados = porCat.stream()
+                    .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
+                    .count();
+
             OptionalDouble avg = porCat.stream()
                     .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
-                    .mapToLong(m -> java.time.Duration.between(m.getFechaHoraInicio(), m.getFechaHoraFin()).toHours())
+                    .mapToLong(m -> java.time.Duration
+                            .between(m.getFechaHoraInicio(), m.getFechaHoraFin())
+                            .toHours())
                     .average();
-            String promedio = avg.isPresent() ? String.format("%.1fh", avg.getAsDouble()) : "-";
 
-            if (total > maxCount) { maxCount = total; categoriaMasFrecuente = cat; }
-            filas.add(new String[]{cat, String.valueOf(total), String.valueOf(pendientes), String.valueOf(finalizados), promedio});
+            String promedio = avg.isPresent()
+                    ? String.format("%.1f h", avg.getAsDouble())
+                    : "-";
+
+            if (total > maxCount) {
+                maxCount = total;
+                categoriaMasFrecuente = cat;
+            }
+
+            filas.add(new String[]{
+                    cat,
+                    String.valueOf(total),
+                    String.valueOf(pendientes),
+                    String.valueOf(finalizados),
+                    promedio
+            });
         }
 
         tablaReportes.setItems(FXCollections.observableArrayList(filas));
-        lblTotalSolicitudes.setText(String.valueOf(lista.size()));
-        lblCategoriaMasFrecuente.setText(categoriaMasFrecuente.isEmpty() ? "-" : categoriaMasFrecuente);
 
+        lblTotalSolicitudes.setText(String.valueOf(lista.size()));
+
+        lblCategoriaMasFrecuente.setText(
+                categoriaMasFrecuente.isEmpty() ? "-" : categoriaMasFrecuente
+        );
 
         lista.stream()
                 .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
-                .mapToLong(m -> java.time.Duration.between(m.getFechaHoraInicio(), m.getFechaHoraFin()).toHours())
+                .mapToLong(m -> java.time.Duration
+                        .between(m.getFechaHoraInicio(), m.getFechaHoraFin())
+                        .toHours())
                 .average()
                 .ifPresentOrElse(
                         h -> lblPromedioResolucion.setText(String.format("%.1f horas", h)),

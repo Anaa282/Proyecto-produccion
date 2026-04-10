@@ -25,23 +25,53 @@ public class HistorialController {
 
     @FXML
     public void initialize() {
-        colId.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getId())));
-        colFecha.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getFecha()));
-        colResidente.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getResidente()));
-        colCategoria.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCategoria()));
-        colTecnico.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTecnico()));
-        colTiempo.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTiempoResolucion()));
+
+        colId.setCellValueFactory(d ->
+                new SimpleStringProperty(String.valueOf(d.getValue().getId()))
+        );
+
+        colFecha.setCellValueFactory(d ->
+                new SimpleStringProperty(d.getValue().getFecha())
+        );
+
+        colResidente.setCellValueFactory(d ->
+                new SimpleStringProperty(d.getValue().getResidente())
+        );
+
+        colCategoria.setCellValueFactory(d ->
+                new SimpleStringProperty(d.getValue().getCategoria())
+        );
+
+        colTecnico.setCellValueFactory(d ->
+                new SimpleStringProperty(d.getValue().getTecnico())
+        );
+
+        colTiempo.setCellValueFactory(d ->
+                new SimpleStringProperty(
+                        d.getValue().getTiempoSolucionHoras() + " horas"
+                )
+        );
 
         cargarDatos();
     }
 
     private void cargarDatos() {
-        ArrayList<Mantenimiento> lista = MantenimientoDAO.cargarTodos();
+
+        MantenimientoDAO dao = new MantenimientoDAO();
+
+        ArrayList<Mantenimiento> lista = new ArrayList<>(dao.obtenerMantenimientos());
+
         ObservableList<Mantenimiento> finalizados = FXCollections.observableArrayList(
-                lista.stream().filter(m -> m.getEstado().equals("Finalizado")).collect(Collectors.toList())
+                lista.stream()
+                        .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
+                        .collect(Collectors.toList())
         );
+
         tablaHistorial.setItems(finalizados);
-        lblTotalFinalizados.setText("Total finalizados: " + finalizados.size());
+
+        lblTotalFinalizados.setText(
+                "Total finalizados: " + finalizados.size()
+        );
     }
 
     @FXML

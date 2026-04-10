@@ -20,10 +20,12 @@ public class TecnicosController {
     @FXML private TableColumn<String[], String> colFinalizados;
     @FXML private TableColumn<String[], String> colTotal;
 
-    private static final List<String> TECNICOS = Arrays.asList("Lopez", "Martinez", "Garcia");
+    private static final List<String> TECNICOS =
+            Arrays.asList("Lopez", "Martinez", "Garcia");
 
     @FXML
     public void initialize() {
+
         colNombre.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[0]));
         colPendientes.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[1]));
         colEnProceso.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[2]));
@@ -34,15 +36,38 @@ public class TecnicosController {
     }
 
     private void cargarDatos() {
-        ArrayList<Mantenimiento> lista = MantenimientoDAO.cargarTodos();
+
+        MantenimientoDAO dao = new MantenimientoDAO();
+        ArrayList<Mantenimiento> lista = new ArrayList<>(dao.obtenerMantenimientos());
+
         List<String[]> filas = new ArrayList<>();
 
         for (String tec : TECNICOS) {
-            long pendientes  = lista.stream().filter(m -> tec.equals(m.getTecnico()) && m.getEstado().equals("Pendiente")).count();
-            long enProceso   = lista.stream().filter(m -> tec.equals(m.getTecnico()) && m.getEstado().equals("En proceso")).count();
-            long finalizados = lista.stream().filter(m -> tec.equals(m.getTecnico()) && m.getEstado().equals("Finalizado")).count();
-            long total       = pendientes + enProceso + finalizados;
-            filas.add(new String[]{tec, String.valueOf(pendientes), String.valueOf(enProceso), String.valueOf(finalizados), String.valueOf(total)});
+
+            long pendientes = lista.stream()
+                    .filter(m -> tec.equalsIgnoreCase(m.getTecnico()) &&
+                            m.getEstado().equalsIgnoreCase("Pendiente"))
+                    .count();
+
+            long enProceso = lista.stream()
+                    .filter(m -> tec.equalsIgnoreCase(m.getTecnico()) &&
+                            m.getEstado().equalsIgnoreCase("En proceso"))
+                    .count();
+
+            long finalizados = lista.stream()
+                    .filter(m -> tec.equalsIgnoreCase(m.getTecnico()) &&
+                            m.getEstado().equalsIgnoreCase("Finalizado"))
+                    .count();
+
+            long total = pendientes + enProceso + finalizados;
+
+            filas.add(new String[]{
+                    tec,
+                    String.valueOf(pendientes),
+                    String.valueOf(enProceso),
+                    String.valueOf(finalizados),
+                    String.valueOf(total)
+            });
         }
 
         tablaTecnicos.setItems(FXCollections.observableArrayList(filas));

@@ -7,6 +7,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.ResultSet;
 
 public class MantenimientoDAO {
 
@@ -194,4 +195,5 @@ public class MantenimientoDAO {
 
         return false;
     }
-}
+
+    }

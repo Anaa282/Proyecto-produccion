@@ -6,8 +6,7 @@ import com.gestionMantenimiento.Util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class DashboardController {
 
@@ -20,15 +19,38 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+
         String rol = SessionManager.esAdmin() ? "Administrador" : "Usuario";
         lblBienvenida.setText("Bienvenido, " + rol);
 
-        ArrayList<Mantenimiento> lista = MantenimientoDAO.cargarTodos();
+        MantenimientoDAO dao = new MantenimientoDAO();
+
+        List<Mantenimiento> lista = dao.obtenerMantenimientos();
 
         lblTotal.setText(String.valueOf(lista.size()));
-        lblPendientes.setText(String.valueOf(lista.stream().filter(m -> m.getEstado().equals("Pendiente")).count()));
-        lblEnProceso.setText(String.valueOf(lista.stream().filter(m -> m.getEstado().equals("En proceso")).count()));
-        lblFinalizados.setText(String.valueOf(lista.stream().filter(m -> m.getEstado().equals("Finalizado")).count()));
-        lblAltaPrioridad.setText(String.valueOf(lista.stream().filter(m -> m.getPrioridad().equals("Alta")).count()));
+
+        lblPendientes.setText(
+                String.valueOf(lista.stream()
+                        .filter(m -> m.getEstado().equalsIgnoreCase("Pendiente"))
+                        .count())
+        );
+
+        lblEnProceso.setText(
+                String.valueOf(lista.stream()
+                        .filter(m -> m.getEstado().equalsIgnoreCase("En proceso"))
+                        .count())
+        );
+
+        lblFinalizados.setText(
+                String.valueOf(lista.stream()
+                        .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
+                        .count())
+        );
+
+        lblAltaPrioridad.setText(
+                String.valueOf(lista.stream()
+                        .filter(m -> m.getPrioridad().equalsIgnoreCase("Alta"))
+                        .count())
+        );
     }
 }
