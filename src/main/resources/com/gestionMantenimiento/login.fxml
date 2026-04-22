@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
 
 <VBox alignment="CENTER" spacing="0"
       prefWidth="420" prefHeight="420"
@@ -35,6 +36,12 @@
         </VBox>
         <Label fx:id="lblError" text=""
                style="-fx-text-fill: #CC0000; -fx-font-size: 11px;"/>
+        <VBox spacing="4">
+            <Label text="Base de datos"
+                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <ComboBox fx:id="cbTipoBD" prefHeight="36"
+                      style="-fx-background-color: #FAFAFA; -fx-border-color: #CCCCCC; -fx-border-radius: 5;"/>
+        </VBox>
         <Button text="Iniciar sesión" prefWidth="10000" prefHeight="40"
                 onAction="#iniciarSesion"
                 style="-fx-background-color: #2C2C2C; -fx-text-fill: #FFFFFF; -fx-font-size: 13px; -fx-font-weight: bold; -fx-border-radius: 6; -fx-background-radius: 6;"/>

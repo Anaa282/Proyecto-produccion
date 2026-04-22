@@ -1,7 +1,9 @@
 package com.gestionMantenimiento.Modelo;
 
+import com.gestionMantenimiento.Util.ConexionBD;
 import com.gestionMantenimiento.Util.SessionManager;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,4 +32,5 @@ public class UsuarioDAO {
         SessionManager.setNombreUsuario(datos[2]);
         return true;
     }
+    Connection conn = ConexionBD.getConexion();
 }
