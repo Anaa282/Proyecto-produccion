@@ -3,10 +3,31 @@ package com.gestionMantenimiento.Modelo;
 import com.gestionMantenimiento.Util.ConexionBD;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MantenimientoDAO {
+
+    // 🔧 MÉTODO CENTRAL PARA CONVERTIR FECHAS (CLAVE)
+    private LocalDateTime convertirFecha(Object obj) {
+        if (obj == null) return null;
+
+        try {
+            if (obj instanceof Long) {
+                return new Timestamp((Long) obj).toLocalDateTime();
+            } else if (obj instanceof String) {
+                return Timestamp.valueOf((String) obj).toLocalDateTime();
+            } else if (obj instanceof Timestamp) {
+                return ((Timestamp) obj).toLocalDateTime();
+            }
+        } catch (Exception e) {
+            System.out.println(" Error convirtiendo fecha: " + obj);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     // 🔹 OBTENER TODOS
     public List<Mantenimiento> obtenerMantenimientos() {
@@ -14,7 +35,7 @@ public class MantenimientoDAO {
         List<Mantenimiento> lista = new ArrayList<>();
         String sql = "SELECT * FROM mantenimiento";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.nuevaConexion();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -30,18 +51,16 @@ public class MantenimientoDAO {
                         rs.getString("tecnico"),
                         rs.getString("descripcion"),
                         rs.getString("ubicacion"),
-                        rs.getTimestamp("fecha_hora_inicio") != null
-                                ? rs.getTimestamp("fecha_hora_inicio").toLocalDateTime()
-                                : null,
-                        rs.getTimestamp("fecha_hora_fin") != null
-                                ? rs.getTimestamp("fecha_hora_fin").toLocalDateTime()
-                                : null,
+                        convertirFecha(rs.getObject("fecha_hora_inicio")),
+                        convertirFecha(rs.getObject("fecha_hora_fin")),
                         rs.getString("comentarios")
                 ));
             }
 
+            System.out.println(" Se cargaron " + lista.size() + " registros");
+
         } catch (SQLException e) {
-            System.out.println("Error al obtener mantenimientos");
+            System.out.println(" Error al obtener mantenimientos");
             e.printStackTrace();
         }
 
@@ -53,7 +72,7 @@ public class MantenimientoDAO {
 
         String sql = "SELECT * FROM mantenimiento WHERE id = ?";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.nuevaConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -71,19 +90,15 @@ public class MantenimientoDAO {
                             rs.getString("tecnico"),
                             rs.getString("descripcion"),
                             rs.getString("ubicacion"),
-                            rs.getTimestamp("fecha_hora_inicio") != null
-                                    ? rs.getTimestamp("fecha_hora_inicio").toLocalDateTime()
-                                    : null,
-                            rs.getTimestamp("fecha_hora_fin") != null
-                                    ? rs.getTimestamp("fecha_hora_fin").toLocalDateTime()
-                                    : null,
+                            convertirFecha(rs.getObject("fecha_hora_inicio")),
+                            convertirFecha(rs.getObject("fecha_hora_fin")),
                             rs.getString("comentarios")
                     );
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al buscar mantenimiento");
+            System.out.println(" Error al buscar mantenimiento");
             e.printStackTrace();
         }
 
@@ -97,7 +112,7 @@ public class MantenimientoDAO {
                 "(fecha, residente, categoria, prioridad, estado, tecnico, descripcion, ubicacion, fecha_hora_inicio, fecha_hora_fin, comentarios) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.nuevaConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, m.getFecha());
@@ -117,11 +132,13 @@ public class MantenimientoDAO {
 
             stmt.setString(11, m.getComentarios());
 
-            stmt.executeUpdate();
-            return true;
+            int filas = stmt.executeUpdate();
+            System.out.println(" Filas insertadas: " + filas);
+
+            return filas > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al insertar mantenimiento");
+            System.out.println(" Error al insertar mantenimiento");
             e.printStackTrace();
         }
 
@@ -135,7 +152,7 @@ public class MantenimientoDAO {
                 "fecha=?, residente=?, categoria=?, prioridad=?, estado=?, tecnico=?, descripcion=?, ubicacion=?, fecha_hora_inicio=?, fecha_hora_fin=?, comentarios=? " +
                 "WHERE id=?";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.nuevaConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, m.getFecha());
@@ -156,11 +173,13 @@ public class MantenimientoDAO {
             stmt.setString(11, m.getComentarios());
             stmt.setInt(12, m.getId());
 
-            stmt.executeUpdate();
-            return true;
+            int filas = stmt.executeUpdate();
+            System.out.println(" Filas actualizadas: " + filas);
+
+            return filas > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al actualizar mantenimiento");
+            System.out.println(" Error al actualizar mantenimiento");
             e.printStackTrace();
         }
 
@@ -172,16 +191,18 @@ public class MantenimientoDAO {
 
         String sql = "DELETE FROM mantenimiento WHERE id=?";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.nuevaConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
 
-            stmt.executeUpdate();
-            return true;
+            int filas = stmt.executeUpdate();
+            System.out.println(" Filas eliminadas: " + filas);
+
+            return filas > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al eliminar mantenimiento");
+            System.out.println(" Error al eliminar mantenimiento");
             e.printStackTrace();
         }
 
