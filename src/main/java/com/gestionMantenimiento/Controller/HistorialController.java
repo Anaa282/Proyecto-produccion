@@ -7,6 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import com.gestionMantenimiento.Modelo.MantenimientoDAOMongo;
+import com.gestionMantenimiento.Util.ConexionBD;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -56,22 +59,23 @@ public class HistorialController {
     }
 
     private void cargarDatos() {
+        List<Mantenimiento> todos;
 
-        MantenimientoDAO dao = new MantenimientoDAO();
-
-        ArrayList<Mantenimiento> lista = new ArrayList<>(dao.obtenerMantenimientos());
+        if (ConexionBD.getTipo() != null &&
+                ConexionBD.getTipo().equalsIgnoreCase("MongoDB")) {
+            todos = new MantenimientoDAOMongo().obtenerMantenimientos();
+        } else {
+            todos = new MantenimientoDAO().obtenerMantenimientos();
+        }
 
         ObservableList<Mantenimiento> finalizados = FXCollections.observableArrayList(
-                lista.stream()
+                todos.stream()
                         .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
                         .collect(Collectors.toList())
         );
 
         tablaHistorial.setItems(finalizados);
-
-        lblTotalFinalizados.setText(
-                "Total finalizados: " + finalizados.size()
-        );
+        lblTotalFinalizados.setText("Total finalizados: " + finalizados.size());
     }
 
     @FXML

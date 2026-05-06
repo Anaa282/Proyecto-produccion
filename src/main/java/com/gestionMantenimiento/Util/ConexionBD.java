@@ -2,19 +2,26 @@ package com.gestionMantenimiento.Util;
 
 import java.io.File;
 import java.sql.*;
+import com.gestionMantenimiento.Util.ConexionMongo;
 
 public class ConexionBD {
 
     private static Connection conexionActual;
     private static String tipoActual;
 
+
     // 📁 Ruta local de SQLite en Windows
     private static final String SQLITE_PATH = "C:\\Users\\sala7\\Documents\\mantenimiento.db";
+
+    public static String getTipo() {
+        return tipoActual;
+    }
+
 
     // 🔹 MYSQL
     public static Connection conectarMySQL() {
         try {
-            String url = "jdbc:mysql://172.30.16.36:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://172.30.16.165:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
             String user = "ammican73";
             String password = "67001373";
 
@@ -93,6 +100,15 @@ public class ConexionBD {
         } else {
             conexionActual = conectarMySQL();
         }
+
+        if ("MongoDB".equalsIgnoreCase(tipo)) {
+            ConexionMongo.conectar();  // inicia la conexión Mongo
+            conexionActual = null;     // no usa java.sql.Connection
+        } else if ("SQLite".equalsIgnoreCase(tipo)) {
+            conexionActual = conectarSQLite();
+        } else {
+            conexionActual = conectarMySQL();
+        }
         return conexionActual;
     }
 
@@ -120,4 +136,5 @@ public class ConexionBD {
             return conectarMySQL();
         }
     }
+
 }

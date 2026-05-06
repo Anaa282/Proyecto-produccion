@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MantenimientoDAO {
 
-    // 🔧 MÉTODO CENTRAL PARA CONVERTIR FECHAS (CLAVE)
+
     private LocalDateTime convertirFecha(Object obj) {
         if (obj == null) return null;
 
