@@ -2,6 +2,7 @@ package com.gestionMantenimiento.Controller;
 
 import com.gestionMantenimiento.Modelo.Mantenimiento;
 import com.gestionMantenimiento.Modelo.MantenimientoDAO;
+import com.gestionMantenimiento.Util.FestivosColombiaService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -30,6 +31,10 @@ public class ReportesController {
 
     @FXML
     public void initialize() {
+
+        // Precargar festivos del año actual y siguiente en background
+        int anioActual = java.time.LocalDate.now().getYear();
+        FestivosColombiaService.getInstance().precargarAnios(anioActual, anioActual + 1);
 
         colCategoria.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[0]));
         colTotal.setCellValueFactory(d -> new SimpleStringProperty(d.getValue()[1]));
@@ -68,13 +73,11 @@ public class ReportesController {
 
             OptionalDouble avg = porCat.stream()
                     .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
-                    .mapToLong(m -> java.time.Duration
-                            .between(m.getFechaHoraInicio(), m.getFechaHoraFin())
-                            .toHours())
+                    .mapToLong(Mantenimiento::getTiempoSolucionDiasHabiles)
                     .average();
 
             String promedio = avg.isPresent()
-                    ? String.format("%.1f h", avg.getAsDouble())
+                    ? String.format("%.1f días háb.", avg.getAsDouble())
                     : "-";
 
             if (total > maxCount) {
@@ -101,12 +104,10 @@ public class ReportesController {
 
         lista.stream()
                 .filter(m -> m.getFechaHoraInicio() != null && m.getFechaHoraFin() != null)
-                .mapToLong(m -> java.time.Duration
-                        .between(m.getFechaHoraInicio(), m.getFechaHoraFin())
-                        .toHours())
+                .mapToLong(Mantenimiento::getTiempoSolucionDiasHabiles)
                 .average()
                 .ifPresentOrElse(
-                        h -> lblPromedioResolucion.setText(String.format("%.1f horas", h)),
+                        d -> lblPromedioResolucion.setText(String.format("%.1f días hábiles", d)),
                         () -> lblPromedioResolucion.setText("-")
                 );
     }

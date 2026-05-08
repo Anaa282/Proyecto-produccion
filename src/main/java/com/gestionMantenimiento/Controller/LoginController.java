@@ -21,7 +21,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        cbTipoBD.getItems().addAll("MySQL", "SQLite");
+        cbTipoBD.getItems().addAll("MySQL", "SQLite", "MongoDB");
         cbTipoBD.setValue("SQLite");
     }
 

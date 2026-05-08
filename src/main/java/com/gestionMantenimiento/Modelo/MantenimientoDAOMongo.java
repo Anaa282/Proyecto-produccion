@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,35 @@ public class MantenimientoDAOMongo {
 
     // Convierte Document de Mongo → objeto Mantenimiento
     private Mantenimiento documentoAMantenimiento(Document doc) {
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime inicio = null;
+        LocalDateTime fin = null;
+
+        try {
+
+            if (doc.get("fecha_hora_inicio") != null) {
+                inicio = LocalDateTime.parse(
+                        doc.getString("fecha_hora_inicio"),
+                        formatter
+                );
+            }
+
+            if (doc.get("fecha_hora_fin") != null) {
+                fin = LocalDateTime.parse(
+                        doc.getString("fecha_hora_fin"),
+                        formatter
+                );
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error parseando fecha: " + e.getMessage());
+        }
+
         return new Mantenimiento(
-                doc.getObjectId("_id").hashCode(),   // id numérico aproximado
+                doc.getObjectId("_id").hashCode(),
                 doc.getString("fecha"),
                 doc.getString("residente"),
                 doc.getString("categoria"),
@@ -31,10 +59,8 @@ public class MantenimientoDAOMongo {
                 doc.getString("tecnico"),
                 doc.getString("descripcion"),
                 doc.getString("ubicacion"),
-                doc.get("fecha_hora_inicio") != null
-                        ? LocalDateTime.parse(doc.getString("fecha_hora_inicio")) : null,
-                doc.get("fecha_hora_fin") != null
-                        ? LocalDateTime.parse(doc.getString("fecha_hora_fin")) : null,
+                inicio,
+                fin,
                 doc.getString("comentarios")
         );
     }
@@ -66,9 +92,9 @@ public class MantenimientoDAOMongo {
             for (Document doc : getColeccion().find()) {
                 lista.add(documentoAMantenimiento(doc));
             }
-            System.out.println("✅ Cargados " + lista.size() + " registros de MongoDB");
+            System.out.println(" Cargados " + lista.size() + " registros de MongoDB");
         } catch (Exception e) {
-            System.out.println("❌ Error al obtener de MongoDB: " + e.getMessage());
+            System.out.println(" Error al obtener de MongoDB: " + e.getMessage());
         }
         return lista;
     }
@@ -76,10 +102,10 @@ public class MantenimientoDAOMongo {
     public boolean insertar(Mantenimiento m) {
         try {
             getColeccion().insertOne(mantenimientoADocumento(m));
-            System.out.println("✅ Insertado en MongoDB");
+            System.out.println(" Insertado en MongoDB");
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Error al insertar: " + e.getMessage());
+            System.out.println(" Error al insertar: " + e.getMessage());
             return false;
         }
     }
@@ -89,10 +115,10 @@ public class MantenimientoDAOMongo {
         // o adapta según tu estrategia de IDs
         try {
             getColeccion().deleteOne(Filters.eq("id", id));
-            System.out.println("✅ Eliminado de MongoDB");
+            System.out.println(" Eliminado de MongoDB");
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Error al eliminar: " + e.getMessage());
+            System.out.println(" Error al eliminar: " + e.getMessage());
             return false;
         }
     }
@@ -108,10 +134,10 @@ public class MantenimientoDAOMongo {
                             Updates.set("comentarios", m.getComentarios())
                     )
             );
-            System.out.println("✅ Actualizado en MongoDB");
+            System.out.println(" Actualizado en MongoDB");
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Error al actualizar: " + e.getMessage());
+            System.out.println(" Error al actualizar: " + e.getMessage());
             return false;
         }
     }

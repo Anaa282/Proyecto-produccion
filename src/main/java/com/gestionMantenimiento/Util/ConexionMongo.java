@@ -9,7 +9,7 @@ public class ConexionMongo {
     private static MongoClient clienteActual;
     private static MongoDatabase dbActual;
 
-    // Cambia estos valores por los tuyos
+
     private static final String URI      = "mongodb://172.30.16.165:27017";
     private static final String DB_NAME  = "mantenimiento";
 

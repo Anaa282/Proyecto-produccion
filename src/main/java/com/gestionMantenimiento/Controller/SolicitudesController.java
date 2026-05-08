@@ -109,7 +109,7 @@ public class SolicitudesController {
         List<Mantenimiento> datos;
 
         if (ConexionBD.getTipo() != null &&
-                ConexionBD.getTipo().equalsIgnoreCase("MongoDB")) {
+                ConexionBD.getTipo().equalsIgnoreCase("mongoDB")) {
             MantenimientoDAOMongo dao = new MantenimientoDAOMongo();
             datos = dao.obtenerMantenimientos();
         } else {

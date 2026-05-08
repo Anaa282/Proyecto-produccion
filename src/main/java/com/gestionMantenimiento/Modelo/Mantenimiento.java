@@ -1,5 +1,7 @@
 package com.gestionMantenimiento.Modelo;
 
+import com.gestionMantenimiento.Util.FestivosColombiaService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Mantenimiento {
@@ -84,6 +86,21 @@ public class Mantenimiento {
         }
 
         return java.time.Duration.between(fechaHoraInicio, fechaHoraFin).toHours();
+    }
+
+    /**
+     * Retorna los días hábiles de resolución, excluyendo fines de semana
+     * y festivos colombianos (vía API de Nager).
+     *
+     * @return días hábiles entre fechaHoraInicio y fechaHoraFin, o 0 si no aplica
+     */
+    public long getTiempoSolucionDiasHabiles() {
+        if (fechaHoraInicio == null || fechaHoraFin == null) {
+            return 0;
+        }
+        LocalDate inicio = fechaHoraInicio.toLocalDate();
+        LocalDate fin = fechaHoraFin.toLocalDate();
+        return FestivosColombiaService.getInstance().calcularDiasHabiles(inicio, fin);
     }
 
     // Getters y Setters
