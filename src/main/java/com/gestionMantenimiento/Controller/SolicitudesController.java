@@ -3,6 +3,7 @@ package com.gestionMantenimiento.Controller;
 import com.gestionMantenimiento.Modelo.MantenimientoDAO;
 import com.gestionMantenimiento.Modelo.Mantenimiento;
 import com.gestionMantenimiento.Modelo.MantenimientoDAOMongo;
+import com.gestionMantenimiento.Modelo.AuditoriaDAO;
 import com.gestionMantenimiento.Util.ConexionBD;
 
 import javafx.collections.FXCollections;
@@ -117,7 +118,12 @@ public class SolicitudesController {
             datos = dao.obtenerMantenimientos();
         }
 
-        lista = FXCollections.observableArrayList(datos);
+        // Excluir los finalizados — esos viven en Historial/Auditoría
+        lista = FXCollections.observableArrayList(
+                datos.stream()
+                        .filter(m -> !m.getEstado().equalsIgnoreCase("Finalizado"))
+                        .collect(java.util.stream.Collectors.toList())
+        );
         tablaMantenimientos.setItems(lista);
     }
 
@@ -244,6 +250,7 @@ public class SolicitudesController {
         Mantenimiento m = tablaMantenimientos.getSelectionModel().getSelectedItem();
         if (m == null) return;
 
+        String estadoAnterior = m.getEstado();
         m.setEstado(cbEstado.getValue());
         m.setTecnico(cbTecnico.getValue());
 
@@ -252,6 +259,16 @@ public class SolicitudesController {
             new MantenimientoDAOMongo().actualizar(m);
         } else {
             new MantenimientoDAO().actualizar(m);
+        }
+
+        // Si acaba de pasar a Finalizado → registrar en auditoría
+        boolean recienFinalizado = !estadoAnterior.equalsIgnoreCase("Finalizado")
+                && "Finalizado".equalsIgnoreCase(cbEstado.getValue());
+
+        if (recienFinalizado) {
+            // Registrar fecha/hora de finalización
+            m.setFechaHoraFin(java.time.LocalDateTime.now());
+            new AuditoriaDAO().registrar(m);
         }
 
         cargarSolicitudes();

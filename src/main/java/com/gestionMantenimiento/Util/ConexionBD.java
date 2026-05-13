@@ -21,7 +21,7 @@ public class ConexionBD {
     // 🔹 MYSQL
     public static Connection conectarMySQL() {
         try {
-            String url = "jdbc:mysql://172.30.16.165:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://172.30.16.104:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
             String user = "ammican73";
             String password = "67001373";
 
@@ -88,27 +88,19 @@ public class ConexionBD {
         tipoActual = tipo;
 
         if (conexionActual != null) {
-            try {
-                conexionActual.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            try { conexionActual.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
 
-        if ("SQLite".equalsIgnoreCase(tipo)) {
-            conexionActual = conectarSQLite();
-        } else {
-            conexionActual = conectarMySQL();
-        }
-
+        // ✅ Solo un bloque de lógica
         if ("MongoDB".equalsIgnoreCase(tipo)) {
-            ConexionMongo.conectar();  // inicia la conexión Mongo
-            conexionActual = null;     // no usa java.sql.Connection
+            ConexionMongo.conectar();
+            conexionActual = null;
         } else if ("SQLite".equalsIgnoreCase(tipo)) {
             conexionActual = conectarSQLite();
         } else {
             conexionActual = conectarMySQL();
         }
+
         return conexionActual;
     }
 

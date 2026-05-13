@@ -1,5 +1,6 @@
 package com.gestionMantenimiento.Controller;
 
+import com.gestionMantenimiento.Modelo.AuditoriaDAO;
 import com.gestionMantenimiento.Modelo.Mantenimiento;
 import com.gestionMantenimiento.Modelo.MantenimientoDAO;
 import javafx.beans.property.SimpleStringProperty;
@@ -59,22 +60,21 @@ public class HistorialController {
     }
 
     private void cargarDatos() {
-        List<Mantenimiento> todos;
+        List<Mantenimiento> finalizados;
 
         if (ConexionBD.getTipo() != null &&
                 ConexionBD.getTipo().equalsIgnoreCase("MongoDB")) {
-            todos = new MantenimientoDAOMongo().obtenerMantenimientos();
+            // Lee directo de la colección de auditoría
+            finalizados = new AuditoriaDAO().obtenerTodos();
         } else {
-            todos = new MantenimientoDAO().obtenerMantenimientos();
+            // Fallback: filtra los finalizados del DAO SQL
+            finalizados = new MantenimientoDAO().obtenerMantenimientos()
+                    .stream()
+                    .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
+                    .collect(Collectors.toList());
         }
 
-        ObservableList<Mantenimiento> finalizados = FXCollections.observableArrayList(
-                todos.stream()
-                        .filter(m -> m.getEstado().equalsIgnoreCase("Finalizado"))
-                        .collect(Collectors.toList())
-        );
-
-        tablaHistorial.setItems(finalizados);
+        tablaHistorial.setItems(FXCollections.observableArrayList(finalizados));
         lblTotalFinalizados.setText("Total finalizados: " + finalizados.size());
     }
 
