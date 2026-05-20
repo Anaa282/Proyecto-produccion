@@ -10,9 +10,8 @@ public class ConexionBD {
     private static String tipoActual;
 
 
-    // 📁 Ruta local de SQLite en Windows
-    private static final String SQLITE_PATH = "C:\\Users\\sala7\\Documents\\mantenimiento.db";
 
+    private static final String SQLITE_PATH = "C:\\Users\\sala7\\Documents\\mantenimiento.db";
     public static String getTipo() {
         return tipoActual;
     }
