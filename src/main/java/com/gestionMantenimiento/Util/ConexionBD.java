@@ -21,7 +21,7 @@ public class ConexionBD {
     // 🔹 MYSQL
     public static Connection conectarMySQL() {
         try {
-            String url = "jdbc:mysql://172.30.16.104:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://172.30.16.49:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
             String user = "ammican73";
             String password = "67001373";
 
@@ -56,9 +56,10 @@ public class ConexionBD {
         }
     }
 
-    // Crear tabla automáticamente
+     // Crear tabla automáticamente
     private static void inicializarBaseDatos(Connection conn) {
-        String sql = "CREATE TABLE IF NOT EXISTS mantenimiento (" +
+        // Tabla de mantenimiento
+        String sqlMantenimiento = "CREATE TABLE IF NOT EXISTS mantenimiento (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "fecha TEXT NOT NULL," +
                 "residente TEXT NOT NULL," +
@@ -73,12 +74,36 @@ public class ConexionBD {
                 "comentarios TEXT" +
                 ")";
 
+        // Tabla de auditoría
+        String sqlAuditoria = "CREATE TABLE IF NOT EXISTS auditoria (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "mantenimiento_id INTEGER NOT NULL," +
+                "tipo_evento TEXT NOT NULL," +
+                "fecha_evento TIMESTAMP NOT NULL," +
+                "fecha TEXT," +
+                "residente TEXT," +
+                "categoria TEXT," +
+                "prioridad TEXT," +
+                "estado TEXT," +
+                "tecnico TEXT," +
+                "descripcion TEXT," +
+                "ubicacion TEXT," +
+                "comentarios TEXT," +
+                "fecha_hora_inicio TIMESTAMP," +
+                "fecha_hora_fin TIMESTAMP," +
+                "horas_resolucion INTEGER," +
+                "fecha_finalizacion TIMESTAMP" +
+                ")";
+
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+            stmt.execute(sqlMantenimiento);
             System.out.println(" Tabla 'mantenimiento' lista");
+            
+            stmt.execute(sqlAuditoria);
+            System.out.println(" Tabla 'auditoria' lista");
 
         } catch (SQLException e) {
-            System.out.println(" Error creando tabla: " + e.getMessage());
+            System.out.println(" Error creando tablas: " + e.getMessage());
             e.printStackTrace();
         }
     }
