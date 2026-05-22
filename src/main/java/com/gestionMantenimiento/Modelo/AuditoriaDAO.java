@@ -23,28 +23,32 @@ public class AuditoriaDAO {
 
     /**
      * Garantiza que MongoDB esté conectado.
-     * Si ya estaba conectado, no hace nada; si no, lo conecta.
+     * Si ya estaba conectado, no hace nada; si no, lo conecta automáticamente.
+     * La auditoría SIEMPRE se registra en MongoDB, sin importar qué BD principal esté activa.
      */
     private MongoCollection<Document> getColeccion() {
         MongoDatabase db = ConexionMongo.getDB();
         if (db == null) {
-            System.out.println(" MongoDB no estaba conectado — conectando para auditoría...");
+            System.out.println(" [AUDITORÍA] Reconectando a MongoDB para auditoría...");
             db = ConexionMongo.conectar();
         }
         if (db == null) {
-            throw new IllegalStateException("No se pudo conectar a MongoDB para auditoría.");
+            throw new IllegalStateException("[AUDITORÍA ERROR] No se pudo conectar a MongoDB");
         }
         return db.getCollection("auditoria");
     }
 
     /**
-     * Registra cualquier cambio relevante en la auditoría de MongoDB.
-     * Tipo puede ser: "NUEVO", "ACTUALIZADO", "FINALIZADO"
+     * Registra cualquier cambio relevante en MongoDB.
+     * Tipo puede ser: "CREACION", "ACTUALIZACION", "FINALIZACION"
+     * 
+     * IMPORTANTE: La auditoría SIEMPRE se registra en MongoDB,
+     * sin importar si estás usando SQLite, MySQL o MongoDB como BD principal.
      */
     public boolean registrar(Mantenimiento m, String tipo) {
         try {
             Document doc = new Document()
-                    .append("tipo_evento",       tipo)
+                    .append("tipo_evento",       tipo.toUpperCase())
                     .append("mantenimiento_id",  m.getId())
                     .append("fecha",             m.getFecha())
                     .append("residente",         m.getResidente())
@@ -63,30 +67,32 @@ public class AuditoriaDAO {
                 doc.append("fecha_hora_fin", m.getFechaHoraFin().format(FMT));
 
             // Horas de resolución solo si está finalizado
-            if ("FINALIZADO".equalsIgnoreCase(tipo)) {
+            if ("FINALIZACION".equalsIgnoreCase(tipo)) {
                 doc.append("horas_resolucion", m.getTiempoSolucionHoras());
             }
 
             getColeccion().insertOne(doc);
-            System.out.println(" Auditoría [" + tipo + "] registrada para id=" + m.getId());
+            System.out.println(" ✓ [AUDITORÍA MONGO] " + tipo + " registrado para id=" + m.getId());
             return true;
 
         } catch (Exception e) {
-            System.out.println(" Error al registrar auditoría en MongoDB: " + e.getMessage());
+            System.out.println(" ✗ [AUDITORÍA ERROR] " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * Sobrecarga para compatibilidad con el código anterior que no pasaba tipo.
-     * Por defecto trata el registro como FINALIZADO.
+     * Sobrecarga para compatibilidad con código anterior.
+     * Por defecto trata el registro como FINALIZACION.
      */
     public boolean registrar(Mantenimiento m) {
-        return registrar(m, "FINALIZADO");
+        return registrar(m, "FINALIZACION");
     }
 
     /**
-     * Devuelve todos los registros de auditoría.
+     * Devuelve todos los registros de auditoría desde MongoDB.
+     * MongoDB es el repositorio centralizado de toda la auditoría.
      */
     public List<Mantenimiento> obtenerTodos() {
         List<Mantenimiento> lista = new ArrayList<>();
@@ -94,9 +100,9 @@ public class AuditoriaDAO {
             for (Document doc : getColeccion().find()) {
                 lista.add(documentoAMantenimiento(doc));
             }
-            System.out.println(" Auditoría: " + lista.size() + " registros cargados.");
+            System.out.println(" ✓ [AUDITORÍA] " + lista.size() + " registros cargados desde MongoDB");
         } catch (Exception e) {
-            System.out.println(" Error al leer auditoría: " + e.getMessage());
+            System.out.println(" ✗ [AUDITORÍA ERROR] Al leer auditoría: " + e.getMessage());
         }
         return lista;
     }

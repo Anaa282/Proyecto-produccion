@@ -5,6 +5,7 @@ import com.gestionMantenimiento.Modelo.Mantenimiento;
 import com.gestionMantenimiento.Modelo.MantenimientoDAOMongo;
 import com.gestionMantenimiento.Modelo.AuditoriaDAO;
 import com.gestionMantenimiento.Util.ConexionBD;
+import com.gestionMantenimiento.Util.FestivosColombiaService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -243,7 +244,9 @@ public class SolicitudesController {
 
         // Registrar en auditoría de MongoDB siempre que se inserte correctamente
         if (insertado) {
-            new AuditoriaDAO().registrar(m, "NUEVO");
+            new AuditoriaDAO().registrar(m, "CREACION");
+            // Mostrar aviso de días hábiles para responder
+            mostrarAvisoDiasHabiles(m);
         }
 
         cargarSolicitudes();
@@ -273,15 +276,92 @@ public class SolicitudesController {
                     && "Finalizado".equalsIgnoreCase(cbEstado.getValue());
 
             if (recienFinalizado) {
-                // Registrar fecha/hora de finalización y auditar como FINALIZADO
+                // Registrar fecha/hora de finalización y auditar como FINALIZACION
                 m.setFechaHoraFin(java.time.LocalDateTime.now());
-                new AuditoriaDAO().registrar(m, "FINALIZADO");
+                new AuditoriaDAO().registrar(m, "FINALIZACION");
             } else {
                 // Cualquier otro cambio también queda en auditoría
-                new AuditoriaDAO().registrar(m, "ACTUALIZADO");
+                new AuditoriaDAO().registrar(m, "ACTUALIZACION");
             }
         }
 
         cargarSolicitudes();
+    }
+
+    /**
+     * Muestra un aviso con el tiempo de respuesta estimado en días hábiles
+     * según la prioridad y considerando los festivos de Colombia.
+     */
+    private void mostrarAvisoDiasHabiles(Mantenimiento m) {
+        try {
+            String prioridad = m.getPrioridad();
+            int diasHabiles = calcularDiasHabilesSegunPrioridad(prioridad);
+            LocalDate fechaEstimada = calcularFechaEstimada(LocalDate.now(), diasHabiles);
+
+            String mensaje = String.format(
+                    "✓ Solicitud creada correctamente (ID: %d)\n\n" +
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                    "Información de Tiempo de Respuesta\n" +
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+                    "📌 Prioridad: %s\n" +
+                    "📅 Fecha de solicitud: %s\n" +
+                    "⏰ Días hábiles para responder: %d\n" +
+                    "📆 Fecha estimada de respuesta: %s\n\n" +
+                    "Nota: Los días hábiles excluyen fines de semana\n" +
+                    "y festivos colombianos.",
+                    m.getId(),
+                    prioridad,
+                    m.getFecha(),
+                    diasHabiles,
+                    fechaEstimada
+            );
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("✓ Solicitud Creada");
+            alert.setHeaderText(null);
+            alert.setContentText(mensaje);
+            alert.showAndWait();
+
+        } catch (Exception e) {
+            System.out.println(" Error mostrando aviso de días hábiles: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retorna los días hábiles para responder según la prioridad.
+     * Estos son los SLA (Service Level Agreement) definidos.
+     */
+    private int calcularDiasHabilesSegunPrioridad(String prioridad) {
+        if (prioridad == null) return 5; // Default
+
+        switch (prioridad.toLowerCase()) {
+            case "alta":
+                return 2;
+            case "media":
+                return 5;
+            case "baja":
+                return 10;
+            default:
+                return 5;
+        }
+    }
+
+    /**
+     * Calcula la fecha estimada sumando días hábiles (excluye fines de semana y festivos).
+     * Utiliza el servicio de festivos de Colombia.
+     */
+    private LocalDate calcularFechaEstimada(LocalDate inicio, int diasHabiles) {
+        FestivosColombiaService festivos = FestivosColombiaService.getInstance();
+        LocalDate cursor = inicio;
+        int diasContados = 0;
+
+        while (diasContados < diasHabiles) {
+            cursor = cursor.plusDays(1);
+            if (festivos.esDiaHabil(cursor)) {
+                diasContados++;
+            }
+        }
+
+        return cursor;
     }
 }
