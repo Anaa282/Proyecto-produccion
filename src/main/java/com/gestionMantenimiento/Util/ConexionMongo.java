@@ -10,7 +10,7 @@ public class ConexionMongo {
     private static MongoDatabase dbActual;
 
 
-    private static final String URI      = "mongodb://172.30.16.49:27017";
+    private static final String URI      = "mongodb://172.30.16.238:27017";
     private static final String DB_NAME  = "mantenimiento";
 
     public static MongoDatabase conectar() {

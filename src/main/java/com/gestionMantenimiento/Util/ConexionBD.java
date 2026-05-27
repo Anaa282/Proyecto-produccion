@@ -20,7 +20,7 @@ public class ConexionBD {
     // 🔹 MYSQL
     public static Connection conectarMySQL() {
         try {
-            String url = "jdbc:mysql://172.30.16.49:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://172.30.16.238:3306/mantenimiento?useSSL=false&serverTimezone=UTC";
             String user = "ammican73";
             String password = "67001373";
 

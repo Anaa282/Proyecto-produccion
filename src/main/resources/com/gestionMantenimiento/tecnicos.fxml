@@ -23,11 +23,13 @@
         <TableView fx:id="tablaTecnicos" prefHeight="220"
                    style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
             <columns>
-                <TableColumn fx:id="colNombre"      text="Técnico"      prefWidth="160"/>
-                <TableColumn fx:id="colPendientes"  text="Pendientes"   prefWidth="100"/>
-                <TableColumn fx:id="colEnProceso"   text="En proceso"   prefWidth="100"/>
-                <TableColumn fx:id="colFinalizados" text="Finalizados"  prefWidth="100"/>
-                <TableColumn fx:id="colTotal"       text="Total"        prefWidth="80"/>
+                <TableColumn fx:id="colNombre"       text="Técnico"      prefWidth="160"/>
+                <TableColumn fx:id="colEspecialidad" text="Especialidad" prefWidth="120"/>
+                <TableColumn fx:id="colEstado"       text="Estado"       prefWidth="90"/>
+                <TableColumn fx:id="colPendientes"   text="Pendientes"   prefWidth="90"/>
+                <TableColumn fx:id="colEnProceso"    text="En proceso"   prefWidth="90"/>
+                <TableColumn fx:id="colFinalizados"  text="Finalizados"  prefWidth="90"/>
+                <TableColumn fx:id="colTotal"        text="Total"        prefWidth="70"/>
             </columns>
             <placeholder>
                 <Label text="Sin datos" style="-fx-text-fill: #AAAAAA;"/>
