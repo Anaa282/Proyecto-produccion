@@ -162,4 +162,34 @@ public class AuditoriaDAO {
         }
         return null;
     }
+    public boolean registrarTecnico(Tecnico tecnico, String tipo, String adminUser) {
+        try {
+            Document doc = new Document()
+                    .append("tipo_evento",   tipo.toUpperCase())
+                    .append("entidad",       "TECNICO")
+                    .append("tecnico_id",    tecnico.getId())
+                    .append("nombre",        tecnico.getNombre())
+                    .append("apellido",      tecnico.getApellido())
+                    .append("especialidad",  tecnico.getEspecialidad())
+                    .append("telefono",      tecnico.getTelefono())
+                    .append("email",         tecnico.getEmail())
+                    .append("estado",        tecnico.getEstado())
+                    .append("fecha_ingreso", tecnico.getFechaIngreso() != null
+                            ? tecnico.getFechaIngreso().toString() : null)
+                    .append("usuario_login", tecnico.getUsuarioLogin())
+                    .append("admin_accion",  adminUser)
+                    .append("fecha_evento",  LocalDateTime.now().format(FMT));
+
+            getColeccion().insertOne(doc);
+            System.out.println(" ✓ [AUDITORÍA MONGO] " + tipo
+                    + " → técnico id=" + tecnico.getId()
+                    + " | admin=" + adminUser);
+            return true;
+
+        } catch (Exception e) {
+            System.out.println(" ✗ [AUDITORÍA ERROR] registrarTecnico: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

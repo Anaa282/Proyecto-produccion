@@ -1,51 +1,205 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <VBox spacing="0" style="-fx-background-color: #F0F0F0;"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.gestionMantenimiento.Controller.TecnicosController">
 
+    <!-- ══ BARRA SUPERIOR ══════════════════════════════════════════════════ -->
     <HBox alignment="CENTER_LEFT" prefHeight="52"
-          style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 0 0 1 0; -fx-padding: 0 18;">
-        <Label text="Técnicos" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+          style="-fx-background-color: #FFFFFF;
+                 -fx-border-color: #DDDDDD;
+                 -fx-border-width: 0 0 1 0;
+                 -fx-padding: 0 18;">
+        <Label text="Gestión de Técnicos"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Actualizar" prefHeight="32" prefWidth="100" onAction="#actualizar"
-                style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 12px; -fx-text-fill: #444444;"/>
+        <Button text="↻  Actualizar" prefHeight="32" prefWidth="110"
+                onAction="#actualizar"
+                style="-fx-background-color: #FFFFFF;
+                       -fx-border-color: #CCCCCC;
+                       -fx-border-width: 1;
+                       -fx-border-radius: 5;
+                       -fx-background-radius: 5;
+                       -fx-font-size: 12px;
+                       -fx-text-fill: #444444;"/>
     </HBox>
 
-    <VBox spacing="16" VBox.vgrow="ALWAYS" style="-fx-padding: 20 18 18 18;">
+    <!-- ══ CUERPO PRINCIPAL ════════════════════════════════════════════════ -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: #F0F0F0; -fx-background: #F0F0F0;">
+        <VBox spacing="16" style="-fx-padding: 20 18 18 18;">
 
-        <Label text="Carga de trabajo por técnico"
-               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+            <!-- ── SECCIÓN: Carga de trabajo ──────────────────────────── -->
+            <Label text="Carga de trabajo por técnico"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
 
-        <TableView fx:id="tablaTecnicos" prefHeight="220"
-                   style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;">
-            <columns>
-                <TableColumn fx:id="colNombre"       text="Técnico"      prefWidth="160"/>
-                <TableColumn fx:id="colEspecialidad" text="Especialidad" prefWidth="120"/>
-                <TableColumn fx:id="colEstado"       text="Estado"       prefWidth="90"/>
-                <TableColumn fx:id="colPendientes"   text="Pendientes"   prefWidth="90"/>
-                <TableColumn fx:id="colEnProceso"    text="En proceso"   prefWidth="90"/>
-                <TableColumn fx:id="colFinalizados"  text="Finalizados"  prefWidth="90"/>
-                <TableColumn fx:id="colTotal"        text="Total"        prefWidth="70"/>
-            </columns>
-            <placeholder>
-                <Label text="Sin datos" style="-fx-text-fill: #AAAAAA;"/>
-            </placeholder>
-        </TableView>
+            <TableView fx:id="tablaTecnicos" prefHeight="200"
+                       style="-fx-background-color: #FFFFFF;
+                              -fx-border-color: #DDDDDD;
+                              -fx-border-width: 1;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colNombre"       text="Técnico"      prefWidth="160"/>
+                    <TableColumn fx:id="colEspecialidad" text="Especialidad" prefWidth="120"/>
+                    <TableColumn fx:id="colEstado"       text="Estado"       prefWidth="90"/>
+                    <TableColumn fx:id="colPendientes"   text="Pendientes"   prefWidth="90"/>
+                    <TableColumn fx:id="colEnProceso"    text="En proceso"   prefWidth="90"/>
+                    <TableColumn fx:id="colFinalizados"  text="Finalizados"  prefWidth="90"/>
+                    <TableColumn fx:id="colTotal"        text="Total"        prefWidth="70"/>
+                </columns>
+                <placeholder>
+                    <Label text="Sin datos" style="-fx-text-fill: #AAAAAA;"/>
+                </placeholder>
+            </TableView>
 
-        <VBox spacing="8"
-              style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 16;">
-            <Label text="Información"
-                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-            <Separator/>
-            <Label text="• La tabla muestra el número de solicitudes asignadas a cada técnico."
-                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
-            <Label text="• Para asignar un técnico a una solicitud, ve a la sección Solicitudes."
-                   style="-fx-font-size: 12px; -fx-text-fill: #555555;"/>
+            <!-- ── SECCIÓN: Gestión CRUD ──────────────────────────────── -->
+            <Label text="Administración de técnicos"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+            <TableView fx:id="tablaGestion" prefHeight="200"
+                       style="-fx-background-color: #FFFFFF;
+                              -fx-border-color: #DDDDDD;
+                              -fx-border-width: 1;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="gColNombre"       text="Nombre"       prefWidth="120"/>
+                    <TableColumn fx:id="gColApellido"     text="Apellido"     prefWidth="120"/>
+                    <TableColumn fx:id="gColEspecialidad" text="Especialidad" prefWidth="130"/>
+                    <TableColumn fx:id="gColTelefono"     text="Teléfono"     prefWidth="110"/>
+                    <TableColumn fx:id="gColEmail"        text="Email"        prefWidth="180"/>
+                    <TableColumn fx:id="gColEstado"       text="Estado"       prefWidth="80"/>
+                    <TableColumn fx:id="gColUsuario"      text="Usuario"      prefWidth="110"/>
+                </columns>
+                <placeholder>
+                    <Label text="No hay técnicos registrados" style="-fx-text-fill: #AAAAAA;"/>
+                </placeholder>
+            </TableView>
+
+            <!-- ── FORMULARIO ─────────────────────────────────────────── -->
+            <VBox spacing="12"
+                  style="-fx-background-color: #FFFFFF;
+                         -fx-border-color: #DDDDDD;
+                         -fx-border-width: 1;
+                         -fx-border-radius: 8;
+                         -fx-background-radius: 8;
+                         -fx-padding: 16;">
+
+                <Label text="Datos del técnico"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+                <Separator/>
+
+                <!-- Fila 1: Nombre · Apellido · Especialidad -->
+                <HBox spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Nombre *" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtNombre" promptText="Nombre"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Apellido *" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtApellido" promptText="Apellido"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Especialidad" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtEspecialidad" promptText="Ej: Eléctrico, Plomería…"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Fila 2: Teléfono · Email · Estado -->
+                <HBox spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Teléfono" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtTelefono" promptText="+57 300 000 0000"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Email" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtEmail" promptText="correo@ejemplo.com"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                    <VBox spacing="4" prefWidth="130">
+                        <Label text="Estado *" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <ComboBox fx:id="cmbEstado" prefWidth="130"
+                                  style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Fila 3: Usuario login · Fecha ingreso -->
+                <HBox spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Usuario login" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <TextField fx:id="txtUsuarioLogin" promptText="usuario_sistema"
+                                   style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                    <VBox spacing="4" prefWidth="200">
+                        <Label text="Fecha de ingreso" style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+                        <DatePicker fx:id="dpFechaIngreso" prefWidth="200"
+                                    style="-fx-border-color: #CCCCCC; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Botones de acción -->
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 8 0 0 0;">
+                    <Button fx:id="btnLimpiar" text="Limpiar" prefHeight="34" prefWidth="90"
+                            onAction="#limpiarFormulario"
+                            style="-fx-background-color: #FFFFFF;
+                                   -fx-border-color: #CCCCCC;
+                                   -fx-border-width: 1;
+                                   -fx-border-radius: 5;
+                                   -fx-background-radius: 5;
+                                   -fx-font-size: 12px;
+                                   -fx-text-fill: #444444;"/>
+                    <Button fx:id="btnEliminar" text="Eliminar" prefHeight="34" prefWidth="110"
+                            onAction="#eliminarTecnico"
+                            style="-fx-background-color: #DC3545;
+                                   -fx-text-fill: white;
+                                   -fx-border-radius: 5;
+                                   -fx-background-radius: 5;
+                                   -fx-font-size: 12px;"/>
+                    <Button fx:id="btnActualizarTecnico" text="Actualizar" prefHeight="34" prefWidth="120"
+                            onAction="#actualizarTecnico"
+                            style="-fx-background-color: #FFC107;
+                                   -fx-text-fill: #222;
+                                   -fx-border-radius: 5;
+                                   -fx-background-radius: 5;
+                                   -fx-font-size: 12px;"/>
+                    <Button fx:id="btnAgregar" text="Agregar" prefHeight="34" prefWidth="120"
+                            onAction="#agregarTecnico"
+                            style="-fx-background-color: #28A745;
+                                   -fx-text-fill: white;
+                                   -fx-border-radius: 5;
+                                   -fx-background-radius: 5;
+                                   -fx-font-size: 12px;"/>
+                </HBox>
+            </VBox>
+
+            <!-- ── INFO ───────────────────────────────────────────────── -->
+            <VBox spacing="6"
+                  style="-fx-background-color: #FFFFFF;
+                         -fx-border-color: #DDDDDD;
+                         -fx-border-width: 1;
+                         -fx-border-radius: 8;
+                         -fx-background-radius: 8;
+                         -fx-padding: 14;">
+                <Label text="Información"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+                <Separator/>
+                <Label text="• Selecciona un técnico de la tabla para editarlo o eliminarlo."
+                       style="-fx-font-size: 11px; -fx-text-fill: #555;"/>
+                <Label text="• Toda alta, modificación y baja queda registrada automáticamente en auditoría MongoDB."
+                       style="-fx-font-size: 11px; -fx-text-fill: #555;"/>
+                <Label text="• La auditoría funciona sin importar si el motor principal es MySQL, SQLite o MongoDB."
+                       style="-fx-font-size: 11px; -fx-text-fill: #555;"/>
+            </VBox>
+
         </VBox>
-
-    </VBox>
+    </ScrollPane>
 </VBox>
